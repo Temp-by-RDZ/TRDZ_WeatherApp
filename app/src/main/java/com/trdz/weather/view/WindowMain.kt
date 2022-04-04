@@ -45,6 +45,7 @@ class WindowMain : Fragment() {
 			is ApplicationStatus.Error -> {
 				binding.loadingLayout.visibility = View.GONE
 				binding.message.text = "ОШИБКА"
+				binding.coordinates.text = "Не удалось подключиться к серверам"
 				Snackbar.make(binding.mainView, "Ошибка загрузки: ${data.error}", Snackbar.LENGTH_INDEFINITE).show()
 			}
 			is ApplicationStatus.Loading -> {
@@ -52,7 +53,10 @@ class WindowMain : Fragment() {
 			}
 			is ApplicationStatus.Success -> {
 				binding.loadingLayout.visibility = View.GONE
-				binding.message.text = "Успех"
+				binding.message.text = data.dataCurrent.city.name
+				binding.coordinates.text = "${data.dataCurrent.city.lat}  ${data.dataCurrent.city.lon}"
+				binding.feelsLikeValue.text = data.dataCurrent.sumare.toString()
+				binding.temperatureValue.text = data.dataCurrent.temperature.toString()
 				Toast.makeText(requireContext(),"Данные по LiveData - Полученны", Toast.LENGTH_SHORT).show()
 			}
 			ApplicationStatus.Load -> {

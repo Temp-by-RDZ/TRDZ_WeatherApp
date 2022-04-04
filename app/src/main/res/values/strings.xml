@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Погода</string>
     <string name="_0">0</string>
+    <string name="Temp_real">Температура воздуха</string>
+    <string name="Temp_fealslike">Температура</string>
 </resources>
