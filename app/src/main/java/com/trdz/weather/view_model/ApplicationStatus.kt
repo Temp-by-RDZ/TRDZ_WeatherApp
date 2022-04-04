@@ -2,7 +2,6 @@ package com.trdz.weather.view_model
 
 import com.trdz.weather.model.Weather
 
-
 sealed class ApplicationStatus {
 	object Load:ApplicationStatus()
 	data class Loading(val progress: Int):ApplicationStatus()

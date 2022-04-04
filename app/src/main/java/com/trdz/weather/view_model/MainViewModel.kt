@@ -1,5 +1,6 @@
 package com.trdz.weather.view_model
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,12 +23,15 @@ class MainViewModel(
 			repository.connection()
 			sleep(30L)
 			var status: Int
-			do {
-				status = repository.status()
+			do {status = repository.status()
 				Data_Live.postValue(ApplicationStatus.Loading(status))
 			} while (status > -1 && status < 100)
 			if (status == 100) Data_Live.postValue(ApplicationStatus.Success(repository.getData()))
 			else Data_Live.postValue(ApplicationStatus.Error(repository.getTemporalData(), IllegalAccessError()))
 		}.start()
+	}
+
+	fun initialize(sharedPreferences: SharedPreferences) {//Времееное применение для теста!!!
+		repository.link(sharedPreferences)
 	}
 }
