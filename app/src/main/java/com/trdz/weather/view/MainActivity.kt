@@ -6,13 +6,18 @@ import com.trdz.weather.R
 
 class MainActivity : AppCompatActivity() {
 
+	private val navigation = Navigation(supportFragmentManager)
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		val navigation = Navigation(supportFragmentManager)
+		if (savedInstanceState == null) navigation.add(R.id.container_fragment_base, WindowStart.newInstance(), false);
+		else navigation.restructorization(supportFragmentManager)
+	}
 
-		if (savedInstanceState == null) navigation.add(R.id.container_fragment_base, WindowMain.newInstance(), false);
+	fun getNavigation(): Navigation {
+		return navigation
 	}
 
 }

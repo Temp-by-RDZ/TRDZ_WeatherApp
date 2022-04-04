@@ -3,4 +3,10 @@
     <string name="_0">0</string>
     <string name="Temp_real">Температура воздуха</string>
     <string name="Temp_fealslike">Температура</string>
+    <string name="T_Start_me">Мое местоположение</string>
+    <string name="T_Start_Europe">Европа</string>
+    <string name="T_Start_Asia">Азия</string>
+    <string name="T_Start_Africa">Африка</string>
+    <string name="T_Start_Other">Америка</string>
+    <string name="B_Back">Назад</string>
 </resources>

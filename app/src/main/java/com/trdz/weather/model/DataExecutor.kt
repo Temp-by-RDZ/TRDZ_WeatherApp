@@ -14,8 +14,9 @@ class DataExecutor : Repository {
 		_sharedPreference = sharedPreferences
 	}
 
-	override fun getTemporalData(): Weather {
-		return load()
+	override fun getTemporalData(): List<Weather> {
+		return getData()
+		//return load()
 	}
 
 	private fun load(): Weather { //Времееное применение для теста!!!
@@ -30,10 +31,10 @@ class DataExecutor : Repository {
 		)
 	}
 
-	override fun getData(): Weather {
-		val data: Weather = getPossibilities().random()
-		save(data)
-		return data
+	override fun getData(): List<Weather> {
+		//val data: Weather = getPossibilities().random()
+		//save(data)
+		return getPossibilities()
 	}
 
 	private fun save(data: Weather) { //Времееное применение для теста!!!
@@ -52,17 +53,23 @@ class DataExecutor : Repository {
 			while (process < 100) {
 				sleep(66L);
 				if ((Math.random() * 100).toInt() < 99) process++
-				else {
-					process = -1
-					break
-				}
+				else { process = -1; break }
 			}
 		}.start()
 	}
 
-	fun status(): Int {
-		return process
+	fun connectionFast() {
+		process = 0
+		Thread {
+			while (process < 100) {
+				sleep(11L);
+				if ((Math.random() * 100).toInt() < 99) process++
+				else { process = -1;break}
+			}
+		}.start()
 	}
+
+	fun status(): Int {	return process	}
 
 
 }

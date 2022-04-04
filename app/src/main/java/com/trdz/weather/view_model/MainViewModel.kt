@@ -13,6 +13,8 @@ class MainViewModel(
 	private val repository: DataExecutor = DataExecutor(),
 ) : ViewModel() {
 
+	private var stage: Int = 0
+
 	fun getData(): LiveData<ApplicationStatus> {
 		return Data_Live
 	}
@@ -21,6 +23,20 @@ class MainViewModel(
 		Thread {
 			Data_Live.postValue(ApplicationStatus.Load)
 			repository.connection()
+			sleep(30L)
+			var status: Int
+			do {status = repository.status()
+				Data_Live.postValue(ApplicationStatus.Loading(status))
+			} while (status > -1 && status < 100)
+			if (status == 100) Data_Live.postValue(ApplicationStatus.Success(repository.getData()))
+			else Data_Live.postValue(ApplicationStatus.Error(repository.getTemporalData(), IllegalAccessError()))
+		}.start()
+	}
+
+	fun getSpecifiqWeather() {
+		Thread {
+			Data_Live.postValue(ApplicationStatus.Load)
+			repository.connectionFast()
 			sleep(30L)
 			var status: Int
 			do {status = repository.status()

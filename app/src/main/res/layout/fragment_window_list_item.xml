@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/standart_text_height"
+    android:layout_marginTop="@dimen/margin_micro">
+
+    <LinearLayout
+        android:id="@+id/list_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/T_name"
+            style="@style/Lines"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/standart_text_height" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

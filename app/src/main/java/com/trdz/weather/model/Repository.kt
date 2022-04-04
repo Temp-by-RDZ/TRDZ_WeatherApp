@@ -1,6 +1,6 @@
 package com.trdz.weather.model
 
 interface Repository {
-	fun getTemporalData():Weather
-	fun getData():Weather
+	fun getTemporalData():List<Weather>
+	fun getData():List<Weather>
 }

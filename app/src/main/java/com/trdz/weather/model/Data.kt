@@ -1,8 +1,13 @@
 package com.trdz.weather.model
 
-data class Weather(val city: City = defaultCity(), val temperature:Int=-69, val sumare:Int=-69)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-data class City(val name:String, val lat:Float, val lon:Float)
+@Parcelize
+data class Weather(val city: City = defaultCity(), val temperature:Int=-69, val sumare:Int=-69): Parcelable
+
+@Parcelize
+data class City(val name:String, val lat:Float, val lon:Float): Parcelable
 
 fun defaultCity() = City("Атлантида",31.254167f, -24.254167f)
 

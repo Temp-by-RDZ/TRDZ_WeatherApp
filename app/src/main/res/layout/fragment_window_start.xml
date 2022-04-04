@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".view.WindowStart">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/B_Start_Me"
+        style="@style/basic"
+        android:layout_marginTop="@dimen/head_skip"
+        android:text="@string/T_Start_me" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/B_Start_Europe"
+        style="@style/basic"
+        android:text="@string/T_Start_Europe" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/B_Start_Asia"
+        style="@style/basic"
+        android:text="@string/T_Start_Asia" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/B_Start_Other"
+        style="@style/basic"
+        android:text="@string/T_Start_Other" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/B_Start_Africa"
+        style="@style/basic"
+        android:text="@string/T_Start_Africa" />
+
+</LinearLayout>
