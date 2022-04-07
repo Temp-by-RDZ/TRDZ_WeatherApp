@@ -2,6 +2,7 @@ package com.trdz.weather.model
 
 import android.content.SharedPreferences
 import java.lang.Thread.sleep
+import java.util.*
 
 class DataExecutor : Repository {
 
@@ -32,19 +33,19 @@ class DataExecutor : Repository {
 	}
 
 	override fun getData(): List<Weather> {
-		//val data: Weather = getPossibilities().random()
-		//save(data)
+		save()
 		return getPossibilities()
 	}
 
-	private fun save(data: Weather) { //Времееное применение для теста!!!
-		val myEditor = sharedPreference.edit()
-		myEditor.putString("LAST_NAME", data.city.name)
-		myEditor.putFloat("LAST_LAT", data.city.lat)
-		myEditor.putFloat("LAST_LON", data.city.lon)
-		myEditor.putInt("LAST_TRL", data.temperature)
-		myEditor.putInt("LAST_TFL", data.sumare)
-		myEditor.apply()
+	private fun save() { //Времееное применение для теста!!!
+		sharedPreference.edit().run {
+			putInt("LAST_LOAD", Calendar.DAY_OF_MONTH)
+			apply()
+		}
+	}
+
+	fun needReload(): Boolean {
+		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.DAY_OF_MONTH)
 	}
 
 	fun connection() {
@@ -53,7 +54,9 @@ class DataExecutor : Repository {
 			while (process < 100) {
 				sleep(66L);
 				if ((Math.random() * 100).toInt() < 99) process++
-				else { process = -1; break }
+				else {
+					process = -1; break
+				}
 			}
 		}.start()
 	}
@@ -64,12 +67,12 @@ class DataExecutor : Repository {
 			while (process < 100) {
 				sleep(11L);
 				if ((Math.random() * 100).toInt() < 99) process++
-				else { process = -1;break}
+				else {
+					process = -1;break
+				}
 			}
 		}.start()
 	}
 
-	fun status()= process
-
-
+	fun status() = process
 }

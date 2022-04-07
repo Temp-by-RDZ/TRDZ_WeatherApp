@@ -21,6 +21,8 @@ import com.trdz.weather.view_model.MainViewModel
 
 class WindowList : Fragment(),ItemListClick {
 
+	private var _executors: Leader? = null
+	private val executors get() = _executors!!
 	private var _binding: FragmentWindowListBinding? = null
 	private val binding get() = _binding!!
 	private val adapter = WindowListAdapter(this)
@@ -38,6 +40,7 @@ class WindowList : Fragment(),ItemListClick {
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		_binding = FragmentWindowListBinding.inflate(inflater, container, false)
+		_executors = (requireActivity() as MainActivity)
 		return binding.root
 	}
 
@@ -63,12 +66,11 @@ class WindowList : Fragment(),ItemListClick {
 				binding.progressBar.text = data.progress.toString()
 			}
 			is ApplicationStatus.Success -> {
-				Toast.makeText(requireContext(), "Данные по LiveData - Полученны", Toast.LENGTH_SHORT).show()
 				dataAnalyze(data.dataCurrent)
 			}
 			ApplicationStatus.Load -> {
 				binding.loadingLayout.visibility = View.VISIBLE
-				Toast.makeText(requireContext(), "Данные по LiveData - Загрузка", Toast.LENGTH_SHORT).show()
+				executors.getExecutor().showToast(requireContext(),"Данные по LiveData - Загрузка", Toast.LENGTH_SHORT)
 			}
 		}
 	}
@@ -80,7 +82,7 @@ class WindowList : Fragment(),ItemListClick {
 	}
 
 	private fun openAbout(data: Weather,isFast: Boolean) {
-		(requireActivity() as MainActivity).getNavigation().add(R.id.container_fragment_base, WindowMain.newInstance(Bundle().apply {
+		executors.getNavigation().add(R.id.container_fragment_base, WindowMain.newInstance(Bundle().apply {
 			putBoolean(W_FAST_BUNDLE,isFast)
 			putParcelable(W_MAIN_BUNDLE,data)
 		}), true)

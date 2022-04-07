@@ -4,9 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.trdz.weather.R
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Leader {
 
 	private val navigation = Navigation(supportFragmentManager)
+	private val executor = Executor()
+
+	override fun onDestroy() {
+		executor.stop()
+		super.onDestroy()
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -16,8 +22,7 @@ class MainActivity : AppCompatActivity() {
 		else navigation.restructorization(supportFragmentManager)
 	}
 
-	fun getNavigation(): Navigation {
-		return navigation
-	}
+	override fun getNavigation() = navigation
+	override fun getExecutor() = executor
 
 }

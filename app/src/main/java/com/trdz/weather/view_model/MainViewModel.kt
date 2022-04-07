@@ -20,6 +20,7 @@ class MainViewModel(
 	}
 
 	fun getWeather() {
+		if (repository.needReload()) {
 		Thread {
 			Data_Live.postValue(ApplicationStatus.Load)
 			repository.connection()
@@ -30,7 +31,8 @@ class MainViewModel(
 			} while (status > -1 && status < 100)
 			if (status == 100) Data_Live.postValue(ApplicationStatus.Success(repository.getData()))
 			else Data_Live.postValue(ApplicationStatus.Error(repository.getTemporalData(), IllegalAccessError()))
-		}.start()
+		}.start() }
+		else Data_Live.postValue(ApplicationStatus.Success(repository.getTemporalData()))
 	}
 
 	fun getSpecifiqWeather() {
