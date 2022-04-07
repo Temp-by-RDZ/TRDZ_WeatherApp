@@ -69,7 +69,7 @@ class DataExecutor : Repository {
 		}.start()
 	}
 
-	fun status(): Int {	return process	}
+	fun status()= process
 
 
 }

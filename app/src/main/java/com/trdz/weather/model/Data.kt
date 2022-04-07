@@ -11,8 +11,7 @@ data class City(val name:String, val lat:Float, val lon:Float): Parcelable
 
 fun defaultCity() = City("Атлантида",31.254167f, -24.254167f)
 
-fun getPossibilities() :List<Weather> {
-	return listOf(
+fun getPossibilities() = listOf(
 		Weather(City("Атлантида",31.254167f, -24.254167f),-69,-69),
 		Weather(City("Лондон", 51.5085300f, -0.1257400f), 1, 2),
 		Weather(City("Токио", 35.6895000f, 139.6917100f), 3, 4),
@@ -26,4 +25,3 @@ fun getPossibilities() :List<Weather> {
 		Weather(City("Пекин", 39.90419989999999f, 116.40739630000007f), 19, 20),
 		Weather(City("Москва", 55.755826f, 37.617299900000035f), 1, 2)
 	)
-}

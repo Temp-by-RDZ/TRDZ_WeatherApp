@@ -1,5 +1,6 @@
 package com.trdz.weather.view
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ class WindowListAdapter(
 	private var data: List<Weather> = listOf(),
 ) : RecyclerView.Adapter<WindowListAdapter.MyHolder?>() {
 
+	@SuppressLint("NotifyDataSetChanged")
 	fun setData(dataNew: List<Weather>) {
 		this.data = dataNew
 		notifyDataSetChanged()

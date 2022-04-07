@@ -27,9 +27,8 @@ class WindowMain : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		val weather: Weather = requireArguments().getParcelable<Weather>(W_MAIN_BUNDLE)!!
 		binding.BBack.setOnClickListener{requireActivity().onBackPressed()}
-		renderData(weather)
+		arguments?.getParcelable<Weather>(W_MAIN_BUNDLE)?.let { renderData(it) }
 	}
 
 	private fun renderData(data: Weather) {
