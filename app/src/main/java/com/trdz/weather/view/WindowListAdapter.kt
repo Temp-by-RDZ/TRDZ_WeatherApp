@@ -36,9 +36,10 @@ class WindowListAdapter(
 
 	inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		fun bind(weather: Weather) {
-			val binding = FragmentWindowListItemBinding.bind(itemView)
-			binding.TName.text = weather.city.name
-			binding.root.setOnClickListener { onItemClick.onItemClick(weather) }
+			FragmentWindowListItemBinding.bind(itemView).apply {
+				TName.text = weather.city.name
+				root.setOnClickListener { onItemClick.onItemClick(weather) }
+			}
 		}
 	}
 }
