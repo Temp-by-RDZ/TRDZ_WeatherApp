@@ -14,11 +14,15 @@ class MainActivity : AppCompatActivity(), Leader {
 		super.onDestroy()
 	}
 
+	override fun onBackPressed() {
+		// do nothing
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		if (savedInstanceState == null) navigation.add(R.id.container_fragment_base, WindowStart.newInstance(), false);
+		if (savedInstanceState == null) navigation.add(R.id.container_fragment_base, WindowStart.newInstance(), false)
 		else navigation.restructorization(supportFragmentManager)
 	}
 

@@ -13,9 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowListBinding
 import com.trdz.weather.model.Weather
-import com.trdz.weather.utility.W_FAST_BUNDLE
-import com.trdz.weather.utility.W_LIST_BUNDLE
-import com.trdz.weather.utility.W_MAIN_BUNDLE
+import com.trdz.weather.utility.*
 import com.trdz.weather.view_model.ApplicationStatus
 import com.trdz.weather.view_model.MainViewModel
 
@@ -46,7 +44,7 @@ class WindowList : Fragment(),ItemListClick {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.BBack.setOnClickListener{requireActivity().onBackPressed()}
+		binding.BBack.setOnClickListener{requireActivity().supportFragmentManager.popBackStack()}
 		binding.recycleList.adapter = adapter
 		val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 		val observer = Observer<ApplicationStatus> {  renderData(it) }
@@ -59,8 +57,9 @@ class WindowList : Fragment(),ItemListClick {
 	private fun renderData(data: ApplicationStatus) {
 		when (data) {
 			is ApplicationStatus.Error -> {
-				Snackbar.make(binding.mainView, "Ошибка загрузки: ${data.error}", Snackbar.LENGTH_LONG).show()
-				dataAnalyze(data.dataPast)
+				binding.mainView.showSnackBar("Ошибка загрузки: ${data.error}",Snackbar.LENGTH_INDEFINITE) {
+					action("Игнорировать") { dataAnalyze(data.dataPast) }
+				}
 			}
 			is ApplicationStatus.Loading -> {
 				binding.progressBar.text = data.progress.toString()
