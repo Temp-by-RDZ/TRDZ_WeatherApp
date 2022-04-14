@@ -17,19 +17,6 @@ class DataExecutor : Repository {
 
 	override fun getTemporalData(): List<Weather> {
 		return getData()
-		//return load()
-	}
-
-	private fun load(): Weather { //Времееное применение для теста!!!
-		return Weather(
-			City(
-				sharedPreference.getString("LAST_NAME", "Ошибка") ?: "Ошибка",
-				sharedPreference.getFloat("LAST_LAT", 0.0f),
-				sharedPreference.getFloat("LAST_LON", 0.0f)
-			),
-			sharedPreference.getInt("LAST_TRL", 0),
-			sharedPreference.getInt("LAST_TFL", 0)
-		)
 	}
 
 	override fun getData(): List<Weather> {
@@ -39,13 +26,13 @@ class DataExecutor : Repository {
 
 	private fun save() { //Времееное применение для теста!!!
 		sharedPreference.edit().run {
-			putInt("LAST_LOAD", Calendar.DAY_OF_MONTH)
+			putInt("LAST_LOAD", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 			apply()
 		}
 	}
 
 	fun needReload(): Boolean {
-		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.DAY_OF_MONTH)
+		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 	}
 
 	fun connection() {

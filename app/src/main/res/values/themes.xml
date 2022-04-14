@@ -19,9 +19,16 @@
     </style>
 
     <style name="basic">
+        <item name="backgroundTint">@color/buttons</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">@dimen/margin_big</item>
+    </style>
+
+    <style name="ignore">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_colosal</item>
     </style>
 
     <style name="Theme.Task05AS_Weather.NoActionBar">

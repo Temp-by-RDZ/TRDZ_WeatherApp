@@ -13,26 +13,25 @@ class MainViewModel(
 	private val repository: DataExecutor = DataExecutor(),
 ) : ViewModel() {
 
-	private var stage: Int = 0
-
 	fun getData(): LiveData<ApplicationStatus> {
 		return Data_Live
 	}
 
 	fun getWeather() {
 		if (repository.needReload()) {
-		Thread {
-			Data_Live.postValue(ApplicationStatus.Load)
-			repository.connection()
-			sleep(30L)
-			var status: Int
-			do {status = repository.status()
-				Data_Live.postValue(ApplicationStatus.Loading(status))
-			} while (status > -1 && status < 100)
-			if (status == 100) Data_Live.postValue(ApplicationStatus.Success(repository.getData()))
-			else Data_Live.postValue(ApplicationStatus.Error(repository.getTemporalData(), IllegalAccessError()))
-		}.start() }
-		else Data_Live.postValue(ApplicationStatus.Success(repository.getTemporalData()))
+			Thread {
+				Data_Live.postValue(ApplicationStatus.Load)
+				repository.connection()
+				sleep(30L)
+				var status: Int
+				do {
+					status = repository.status()
+					Data_Live.postValue(ApplicationStatus.Loading(status))
+				} while (status > -1 && status < 100)
+				if (status == 100) Data_Live.postValue(ApplicationStatus.Success(repository.getData()))
+				else Data_Live.postValue(ApplicationStatus.Error(repository.getTemporalData(), IllegalAccessError()))
+			}.start()
+		} else Data_Live.postValue(ApplicationStatus.Success(repository.getTemporalData()))
 	}
 
 	fun getSpecifiqWeather() {
@@ -41,7 +40,8 @@ class MainViewModel(
 			repository.connectionFast()
 			sleep(30L)
 			var status: Int
-			do {status = repository.status()
+			do {
+				status = repository.status()
 				Data_Live.postValue(ApplicationStatus.Loading(status))
 			} while (status > -1 && status < 100)
 			if (status == 100) Data_Live.postValue(ApplicationStatus.Success(repository.getData()))

@@ -23,7 +23,7 @@ class Navigation(private var manager: FragmentManager) {
 		transaction.commit()
 	}
 
-	fun restructorization( manager: FragmentManager) {
+	fun restructorization(manager: FragmentManager) {
 		if (!is_corrupted()) return
 		this.manager = manager
 	}

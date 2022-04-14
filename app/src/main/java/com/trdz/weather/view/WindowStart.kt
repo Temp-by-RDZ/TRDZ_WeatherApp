@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowStartBinding
 
-class WindowStart : Fragment(), View.OnClickListener{
+class WindowStart : Fragment(), View.OnClickListener {
 
 	private var _executors: Leader? = null
 	private val executors get() = _executors!!
@@ -18,6 +18,7 @@ class WindowStart : Fragment(), View.OnClickListener{
 	override fun onDestroyView() {
 		super.onDestroyView()
 		_binding = null
+		_executors = null
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -39,13 +40,21 @@ class WindowStart : Fragment(), View.OnClickListener{
 		binding.BStartOther.setOnClickListener(this)
 	}
 
-	private fun getCord(type: View?):Int {
+	private fun getCord(type: View?): Int {
 		when (type?.id) {
-			(R.id.B_Start_Asia) -> { return 1 }
-			(R.id.B_Start_Africa) -> { return 2	}
-			(R.id.B_Start_Europe) -> { return 3	}
-			(R.id.B_Start_Other) -> { return 4 }
+			(R.id.B_Start_Asia) -> {
+				return 1
 			}
+			(R.id.B_Start_Africa) -> {
+				return 2
+			}
+			(R.id.B_Start_Europe) -> {
+				return 3
+			}
+			(R.id.B_Start_Other) -> {
+				return 4
+			}
+		}
 		return 0
 	}
 

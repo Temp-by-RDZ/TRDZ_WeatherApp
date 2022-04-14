@@ -15,7 +15,7 @@ class WindowMain : Fragment() {
 
 	private var _binding: FragmentWindowMainBinding? = null
 	private val binding get() = _binding!!
-	private var repeatable:Boolean = false
+	private var repeatable: Boolean = false
 
 	override fun onDestroyView() {
 		super.onDestroyView()
@@ -29,11 +29,11 @@ class WindowMain : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.BBack.setOnClickListener{ fallBack() }
+		binding.BBack.setOnClickListener { fallBack() }
 		arguments?.run {
-			getBoolean(W_FAST_BUNDLE).let {repeatable = it}
+			getBoolean(W_FAST_BUNDLE).let { repeatable = it }
 			getParcelable<Weather>(W_MAIN_BUNDLE)?.let { renderData(it) }
-			}
+		}
 	}
 
 	private fun fallBack() {
@@ -52,7 +52,7 @@ class WindowMain : Fragment() {
 
 	companion object {
 		@JvmStatic
-		fun newInstance(bundle: Bundle):WindowMain{
+		fun newInstance(bundle: Bundle): WindowMain {
 			val argument = WindowMain()
 			argument.arguments = bundle
 			return argument

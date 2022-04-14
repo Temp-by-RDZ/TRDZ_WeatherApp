@@ -9,4 +9,8 @@
     <string name="T_Start_Africa">Африка</string>
     <string name="T_Start_Other">Америка</string>
     <string name="B_Back">Назад</string>
+    <string name="T_ignore_error">Загрузить прошлые данные?</string>
+    <string name="T_Repeat">Повторить</string>
+    <string name="T_Error">Ошибка загрузки:</string>
+    <string name="T_Loading">Данные по LiveData - Загрузка</string>
 </resources>

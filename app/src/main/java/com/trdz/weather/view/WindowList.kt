@@ -16,19 +16,25 @@ import com.trdz.weather.model.Weather
 import com.trdz.weather.utility.*
 import com.trdz.weather.view_model.ApplicationStatus
 import com.trdz.weather.view_model.MainViewModel
+import kotlinx.android.synthetic.main.fragment_window_list.view.*
 
-class WindowList : Fragment(),ItemListClick {
+class WindowList : Fragment(), ItemListClick {
 
 	private var _executors: Leader? = null
 	private val executors get() = _executors!!
 	private var _binding: FragmentWindowListBinding? = null
 	private val binding get() = _binding!!
+	private var _viewModel: MainViewModel? = null
+	private val viewModel get() = _viewModel!!
+
 	private val adapter = WindowListAdapter(this)
 	private var coordinates: Int = 0
 
 	override fun onDestroyView() {
 		super.onDestroyView()
 		_binding = null
+		_executors = null
+		_viewModel = null
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,17 +45,21 @@ class WindowList : Fragment(),ItemListClick {
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		_binding = FragmentWindowListBinding.inflate(inflater, container, false)
 		_executors = (requireActivity() as MainActivity)
+		_viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.BBack.setOnClickListener{requireActivity().supportFragmentManager.popBackStack()}
+		binding.BBack.setOnClickListener { requireActivity().supportFragmentManager.popBackStack() }
 		binding.recycleList.adapter = adapter
-		val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-		val observer = Observer<ApplicationStatus> {  renderData(it) }
+		val observer = Observer<ApplicationStatus> { renderData(it) }
 		viewModel.getData().observe(viewLifecycleOwner, observer)
 		viewModel.initialize(requireActivity().getSharedPreferences("BIG", Context.MODE_PRIVATE))//Времееное применение для теста!!!
+		startSearch()
+	}
+
+	private fun startSearch() {
 		if (coordinates == 0) viewModel.getSpecifiqWeather()
 		else viewModel.getWeather()
 	}
@@ -57,8 +67,12 @@ class WindowList : Fragment(),ItemListClick {
 	private fun renderData(data: ApplicationStatus) {
 		when (data) {
 			is ApplicationStatus.Error -> {
-				binding.mainView.showSnackBar("Ошибка загрузки: ${data.error}",Snackbar.LENGTH_INDEFINITE) {
-					action("Игнорировать") { dataAnalyze(data.dataPast) }
+				binding.loadingLayout.Error_found.visibility = View.VISIBLE
+				binding.mainView.showSnackBar(getString(R.string.T_Error) + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
+					action(R.string.T_Repeat) {
+						if (binding.loadingLayout.Error_found.isChecked) dataAnalyze(data.dataPast)
+						else startSearch()
+					}
 				}
 			}
 			is ApplicationStatus.Loading -> {
@@ -69,21 +83,21 @@ class WindowList : Fragment(),ItemListClick {
 			}
 			ApplicationStatus.Load -> {
 				binding.loadingLayout.visibility = View.VISIBLE
-				executors.getExecutor().showToast(requireContext(),"Данные по LiveData - Загрузка", Toast.LENGTH_SHORT)
+				executors.getExecutor().showToast(requireContext(), getString(R.string.T_Loading), Toast.LENGTH_SHORT)
 			}
 		}
 	}
 
 	private fun dataAnalyze(data: List<Weather>) {
 		if (coordinates > 0) adapter.setData(data)
-		else openAbout(data.random(),true)
+		else openAbout(data.random(), true)
 		binding.loadingLayout.visibility = View.GONE
 	}
 
-	private fun openAbout(data: Weather,isFast: Boolean) {
+	private fun openAbout(data: Weather, isFast: Boolean) {
 		executors.getNavigation().add(R.id.container_fragment_base, WindowMain.newInstance(Bundle().apply {
-			putBoolean(W_FAST_BUNDLE,isFast)
-			putParcelable(W_MAIN_BUNDLE,data)
+			putBoolean(W_FAST_BUNDLE, isFast)
+			putParcelable(W_MAIN_BUNDLE, data)
 		}), true)
 	}
 
@@ -97,6 +111,6 @@ class WindowList : Fragment(),ItemListClick {
 			}
 	}
 
-	override fun onItemClick(weather: Weather)= openAbout(weather,false)
+	override fun onItemClick(weather: Weather) = openAbout(weather, false)
 
 }

@@ -14,9 +14,7 @@ class MainActivity : AppCompatActivity(), Leader {
 		super.onDestroy()
 	}
 
-	override fun onBackPressed() {
-		// do nothing
-	}
+	override fun onBackPressed() { /*nothing*/  }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
