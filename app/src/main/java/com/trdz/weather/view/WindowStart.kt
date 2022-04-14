@@ -33,27 +33,19 @@ class WindowStart : Fragment(), View.OnClickListener {
 	}
 
 	private fun buttonBinds() {
-		binding.BStartMe.setOnClickListener(this)
-		binding.BStartAsia.setOnClickListener(this)
-		binding.BStartAfrica.setOnClickListener(this)
-		binding.BStartEurope.setOnClickListener(this)
-		binding.BStartOther.setOnClickListener(this)
+		binding.bStartMe.setOnClickListener(this)
+		binding.bStartAsia.setOnClickListener(this)
+		binding.bStartAfrica.setOnClickListener(this)
+		binding.bStartEurope.setOnClickListener(this)
+		binding.bStartOther.setOnClickListener(this)
 	}
 
 	private fun getCord(type: View?): Int {
 		when (type?.id) {
-			(R.id.B_Start_Asia) -> {
-				return 1
-			}
-			(R.id.B_Start_Africa) -> {
-				return 2
-			}
-			(R.id.B_Start_Europe) -> {
-				return 3
-			}
-			(R.id.B_Start_Other) -> {
-				return 4
-			}
+			(R.id.b_start_asia) -> { return 1 }
+			(R.id.b_start_africa) -> { return 2 }
+			(R.id.b_start_europe) -> { return 3 }
+			(R.id.b_start_other) -> { return 4 }
 		}
 		return 0
 	}

@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/head_skip"
-        android:textSize="@dimen/T_head_size"
+        android:textSize="@dimen/t_head_size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,35 +32,35 @@
         tools:text="подпись города" />
 
     <TextView
-        android:id="@+id/temperatureLabel"
+        android:id="@+id/temperature_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/head_skip"
         android:ems="9"
-        android:text="@string/Temp_real"
+        android:text="@string/temp_real"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coordinates" />
 
     <TextView
-        android:id="@+id/temperatureValue"
+        android:id="@+id/temperature_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
         android:text="@string/_0"
-        app:layout_constraintStart_toEndOf="@+id/temperatureLabel"
-        app:layout_constraintTop_toTopOf="@+id/temperatureLabel" />
+        app:layout_constraintStart_toEndOf="@+id/temperature_label"
+        app:layout_constraintTop_toTopOf="@+id/temperature_label" />
 
     <TextView
-        android:id="@+id/feelsLikeLabel"
+        android:id="@+id/feelsLike_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal"
         android:ems="6"
-        android:text="@string/Temp_fealslike"
+        android:text="@string/temp_fealslike"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/temperatureLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/temperature_label" />
 
     <TextView
         android:id="@+id/feelsLikeValue"
@@ -68,15 +68,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
         android:text="@string/_0"
-        app:layout_constraintStart_toEndOf="@+id/feelsLikeLabel"
-        app:layout_constraintTop_toTopOf="@+id/feelsLikeLabel" />
+        app:layout_constraintStart_toEndOf="@+id/feelsLike_label"
+        app:layout_constraintTop_toTopOf="@+id/feelsLike_label" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:backgroundTint="@color/buttons"
         android:id="@+id/B_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/B_Back"
+        android:text="@string/b_back"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

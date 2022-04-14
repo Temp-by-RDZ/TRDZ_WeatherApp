@@ -40,7 +40,7 @@
 
     <style name="Theme.Task05AS_Weather.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Lines">
+    <style name="lines">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="backgroundColor">@color/black</item>

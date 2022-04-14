@@ -67,10 +67,10 @@ class WindowList : Fragment(), ItemListClick {
 	private fun renderData(data: ApplicationStatus) {
 		when (data) {
 			is ApplicationStatus.Error -> {
-				binding.loadingLayout.Error_found.visibility = View.VISIBLE
-				binding.mainView.showSnackBar(getString(R.string.T_Error) + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
-					action(R.string.T_Repeat) {
-						if (binding.loadingLayout.Error_found.isChecked) dataAnalyze(data.dataPast)
+				binding.loadingLayout.error_found.visibility = View.VISIBLE
+				binding.mainView.showSnackBar(getString(R.string.t_error) + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
+					action(R.string.t_repeat) {
+						if (binding.loadingLayout.error_found.isChecked) dataAnalyze(data.dataPast)
 						else startSearch()
 					}
 				}
@@ -83,7 +83,7 @@ class WindowList : Fragment(), ItemListClick {
 			}
 			ApplicationStatus.Load -> {
 				binding.loadingLayout.visibility = View.VISIBLE
-				executors.getExecutor().showToast(requireContext(), getString(R.string.T_Loading), Toast.LENGTH_SHORT)
+				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
 			}
 		}
 	}

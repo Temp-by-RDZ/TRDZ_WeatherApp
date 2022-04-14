@@ -26,7 +26,7 @@
             android:id="@+id/B_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/B_Back" />
+            android:text="@string/b_back" />
     </LinearLayout>
 
     <FrameLayout
@@ -38,12 +38,12 @@
         tools:visibility="invisible">
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/Error_found"
+            android:id="@+id/error_found"
             style="@style/ignore"
             android:layout_gravity="center_horizontal"
-            android:text="@string/T_ignore_error"
+            android:text="@string/t_ignore_error"
             android:visibility="invisible"
-            android:textSize="@dimen/T_basis"/>
+            android:textSize="@dimen/t_basis"/>
 
         <TextView
             android:id="@+id/progress_bar"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/_0"
-            android:textSize="@dimen/T_basis" />
+            android:textSize="@dimen/t_basis" />
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"

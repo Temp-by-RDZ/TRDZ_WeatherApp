@@ -8,29 +8,29 @@
     tools:context=".view.WindowStart">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/B_Start_Me"
+        android:id="@+id/b_start_me"
         style="@style/basic"
         android:layout_marginTop="@dimen/head_skip"
-        android:text="@string/T_Start_me" />
+        android:text="@string/t_start_me" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/B_Start_Europe"
+        android:id="@+id/b_start_europe"
         style="@style/basic"
-        android:text="@string/T_Start_Europe" />
+        android:text="@string/t_start_europe" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/B_Start_Asia"
+        android:id="@+id/b_start_asia"
         style="@style/basic"
-        android:text="@string/T_Start_Asia" />
+        android:text="@string/t_start_asia" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/B_Start_Other"
+        android:id="@+id/b_start_other"
         style="@style/basic"
-        android:text="@string/T_Start_Other" />
+        android:text="@string/t_start_other" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/B_Start_Africa"
+        android:id="@+id/b_start_africa"
         style="@style/basic"
-        android:text="@string/T_Start_Africa" />
+        android:text="@string/t_start_africa" />
 
 </LinearLayout>

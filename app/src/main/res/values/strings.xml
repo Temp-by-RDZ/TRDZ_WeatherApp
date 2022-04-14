@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">Погода</string>
     <string name="_0">0</string>
-    <string name="Temp_real">Температура воздуха</string>
-    <string name="Temp_fealslike">Температура</string>
-    <string name="T_Start_me">Мое местоположение</string>
-    <string name="T_Start_Europe">Европа</string>
-    <string name="T_Start_Asia">Азия</string>
-    <string name="T_Start_Africa">Африка</string>
-    <string name="T_Start_Other">Америка</string>
-    <string name="B_Back">Назад</string>
-    <string name="T_ignore_error">Загрузить прошлые данные?</string>
-    <string name="T_Repeat">Повторить</string>
-    <string name="T_Error">Ошибка загрузки:</string>
-    <string name="T_Loading">Данные по LiveData - Загрузка</string>
+    <string name="temp_real">Температура воздуха</string>
+    <string name="temp_fealslike">Температура</string>
+    <string name="t_start_me">Мое местоположение</string>
+    <string name="t_start_europe">Европа</string>
+    <string name="t_start_asia">Азия</string>
+    <string name="t_start_africa">Африка</string>
+    <string name="t_start_other">Америка</string>
+    <string name="t_ignore_error">Загрузить прошлые данные?</string>
+    <string name="t_repeat">Повторить</string>
+    <string name="t_error">Ошибка загрузки:</string>
+    <string name="t_loading">Данные по LiveData - Загрузка</string>
+    <string name="b_back">Назад</string>
 </resources>
