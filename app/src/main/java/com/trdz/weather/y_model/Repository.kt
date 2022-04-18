@@ -1,4 +1,4 @@
-package com.trdz.weather.model
+package com.trdz.weather.y_model
 
 interface Repository {
 	fun getTemporalData():List<Weather>

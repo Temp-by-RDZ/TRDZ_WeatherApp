@@ -1,4 +1,4 @@
-package com.trdz.weather.view
+package com.trdz.weather.w_view
 
 import android.content.Context
 import android.os.Bundle
@@ -12,10 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowListBinding
-import com.trdz.weather.model.Weather
-import com.trdz.weather.utility.*
-import com.trdz.weather.view_model.ApplicationStatus
-import com.trdz.weather.view_model.MainViewModel
+import com.trdz.weather.y_model.Weather
+import com.trdz.weather.z_utility.*
+import com.trdz.weather.x_view_model.StatusProcess
+import com.trdz.weather.x_view_model.MainViewModel
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
 
 class WindowList : Fragment(), ItemListClick {
@@ -53,35 +53,37 @@ class WindowList : Fragment(), ItemListClick {
 		super.onViewCreated(view, savedInstanceState)
 		binding.BBack.setOnClickListener { requireActivity().supportFragmentManager.popBackStack() }
 		binding.recycleList.adapter = adapter
-		val observer = Observer<ApplicationStatus> { renderData(it) }
+		val observer = Observer<StatusProcess> { renderData(it) }
 		viewModel.getData().observe(viewLifecycleOwner, observer)
 		viewModel.initialize(requireActivity().getSharedPreferences("BIG", Context.MODE_PRIVATE))//Времееное применение для теста!!!
 		startSearch()
 	}
 
 	private fun startSearch() {
-		if (coordinates == 0) viewModel.getSpecifiqWeather()
+		if (coordinates == 0) viewModel.getSpecificWeather()
 		else viewModel.getWeather()
 	}
 
-	private fun renderData(data: ApplicationStatus) {
+	private fun renderData(data: StatusProcess) {
 		when (data) {
-			is ApplicationStatus.Error -> {
+			is StatusProcess.Error -> {
 				binding.loadingLayout.error_found.visibility = View.VISIBLE
-				binding.mainView.showSnackBar(getString(R.string.t_error) + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
+				binding.mainView.showSnackBar(getString(R.string.t_error) + "  " + data.code + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
 					action(R.string.t_repeat) {
-						if (binding.loadingLayout.error_found.isChecked) dataAnalyze(data.dataPast)
+						if (binding.loadingLayout.error_found.isChecked) {
+							openAbout(data.dataPast, true)
+							binding.loadingLayout.visibility = View.GONE}
 						else startSearch()
 					}
 				}
 			}
-			is ApplicationStatus.Loading -> {
+			is StatusProcess.Loading -> {
 				binding.progressBar.text = data.progress.toString()
 			}
-			is ApplicationStatus.Success -> {
-				dataAnalyze(data.dataCurrent)
+			is StatusProcess.Success -> {
+				dataAnalyze(data.dataAll)
 			}
-			ApplicationStatus.Load -> {
+			StatusProcess.Load -> {
 				binding.loadingLayout.visibility = View.VISIBLE
 				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
 			}
@@ -95,10 +97,10 @@ class WindowList : Fragment(), ItemListClick {
 	}
 
 	private fun openAbout(data: Weather, isFast: Boolean) {
-		executors.getNavigation().add(R.id.container_fragment_base, WindowMain.newInstance(Bundle().apply {
+		executors.getNavigation().add(requireActivity().supportFragmentManager, WindowMain.newInstance(Bundle().apply {
 			putBoolean(W_FAST_BUNDLE, isFast)
 			putParcelable(W_MAIN_BUNDLE, data)
-		}), true)
+		}))
 	}
 
 	companion object {

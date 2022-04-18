@@ -1,4 +1,4 @@
-package com.trdz.weather.view
+package com.trdz.weather.w_view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -55,6 +55,6 @@ class WindowStart : Fragment(), View.OnClickListener {
 	}
 
 	override fun onClick(type: View?) {
-		executors.getNavigation().add(R.id.container_fragment_base, WindowList.newInstance(getCord(type)), true)
+		executors.getNavigation().add(requireActivity().supportFragmentManager, WindowList.newInstance(getCord(type)))
 	}
 }

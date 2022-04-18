@@ -1,6 +1,8 @@
-package com.trdz.weather.model
+package com.trdz.weather.y_model
 
 import android.content.SharedPreferences
+import com.trdz.weather.x_view_model.ServerResponse
+import com.trdz.weather.y_model.dto.AboutWeather
 import java.lang.Thread.sleep
 import java.util.*
 
@@ -11,8 +13,15 @@ class DataExecutor : Repository {
 	private var _sharedPreference: SharedPreferences? = null
 	private val sharedPreference get() = _sharedPreference!!
 
-	fun link(sharedPreferences: SharedPreferences) { //Времееное применение для теста!!!
+	fun link(sharedPreferences: SharedPreferences) {
 		_sharedPreference = sharedPreferences
+	}
+
+	private fun save() {
+		sharedPreference.edit().run {
+			putInt("LAST_LOAD", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+			apply()
+		}
 	}
 
 	override fun getTemporalData(): List<Weather> {
@@ -24,12 +33,6 @@ class DataExecutor : Repository {
 		return getPossibilities()
 	}
 
-	private fun save() { //Времееное применение для теста!!!
-		sharedPreference.edit().run {
-			putInt("LAST_LOAD", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
-			apply()
-		}
-	}
 
 	fun needReload(): Boolean {
 		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
@@ -48,17 +51,19 @@ class DataExecutor : Repository {
 		}.start()
 	}
 
-	fun connectionFast() {
+	fun connectionFast(serverListener: ServerResponse, lan:Double = -666.0, lon:Double = -666.0) {
 		process = 0
 		Thread {
-			while (process < 100) {
-				sleep(11L);
-				if ((Math.random() * 100).toInt() < 99) process++
-				else {
-					process = -1;break
-				}
-			}
+			val serverStatus = ServerReceiver().load(lan,lon)
+			serverListener.newTarget(29)
+			sleep(10L)
+			if (serverStatus.result!=null)	serverListener.putCurrent(makeCurrent(serverStatus.result))
+			else serverListener.error(serverStatus.code)
 		}.start()
+	}
+
+	private fun makeCurrent(data: AboutWeather): Weather {
+		return Weather(City("",data.info.lat.toFloat(),data.info.lon.toFloat()),data.fact.temp,data.fact.feels_like)
 	}
 
 	fun status() = process

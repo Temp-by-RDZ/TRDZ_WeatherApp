@@ -1,4 +1,4 @@
-package com.trdz.weather.view
+package com.trdz.weather.w_view
 
 import android.content.Context
 import android.widget.Toast

@@ -1,4 +1,4 @@
-package com.trdz.weather.utility
+package com.trdz.weather.z_utility
 
 import android.view.View
 import com.google.android.material.snackbar.Snackbar

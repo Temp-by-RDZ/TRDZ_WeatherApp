@@ -13,4 +13,5 @@
     <string name="t_error">Ошибка загрузки:</string>
     <string name="t_loading">Данные по LiveData - Загрузка</string>
     <string name="b_back">Назад</string>
+    <string name="t_work_line">Текущее местоположение</string>
 </resources>

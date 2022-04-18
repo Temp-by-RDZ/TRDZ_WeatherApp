@@ -1,4 +1,4 @@
-package com.trdz.weather.view
+package com.trdz.weather.w_view
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.trdz.weather.databinding.FragmentWindowListItemBinding
-import com.trdz.weather.model.Weather
+import com.trdz.weather.y_model.Weather
 
 class WindowListAdapter(
 	private val onItemClick: ItemListClick,
