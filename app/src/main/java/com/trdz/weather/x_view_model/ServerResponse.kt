@@ -5,7 +5,6 @@ import com.trdz.weather.y_model.dto.AboutWeather
 
 interface ServerResponse {
 	fun newTarget(target: Int)
-	fun putAll(data: List<AboutWeather>)
-	fun putCurrent(data: Weather)
+	fun put(data: Weather)
 	fun error(error: Int)
 }

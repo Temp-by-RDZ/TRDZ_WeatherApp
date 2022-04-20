@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view
+package com.trdz.weather.w_view.windows
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowListBinding
+import com.trdz.weather.w_view.*
 import com.trdz.weather.y_model.Weather
 import com.trdz.weather.z_utility.*
 import com.trdz.weather.x_view_model.StatusProcess
@@ -60,12 +61,19 @@ class WindowList : Fragment(), ItemListClick {
 	}
 
 	private fun startSearch() {
-		if (coordinates == 0) viewModel.getSpecificWeather()
-		else viewModel.getWeather()
+		if (coordinates == 0) viewModel.getWeather()
+		else viewModel.getWeatherList(coordinates)
 	}
 
 	private fun renderData(data: StatusProcess) {
 		when (data) {
+			StatusProcess.Load -> {
+				binding.loadingLayout.visibility = View.VISIBLE
+				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
+			}
+			is StatusProcess.Loading -> {
+				binding.progressBar.text = data.progress.toString()
+			}
 			is StatusProcess.Error -> {
 				binding.loadingLayout.error_found.visibility = View.VISIBLE
 				binding.mainView.showSnackBar(getString(R.string.t_error) + "  " + data.code + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
@@ -77,22 +85,22 @@ class WindowList : Fragment(), ItemListClick {
 					}
 				}
 			}
-			is StatusProcess.Loading -> {
-				binding.progressBar.text = data.progress.toString()
-			}
-			is StatusProcess.Success -> {
+			is StatusProcess.TransferList -> {
 				dataAnalyze(data.dataAll)
 			}
-			StatusProcess.Load -> {
-				binding.loadingLayout.visibility = View.VISIBLE
-				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
+			is StatusProcess.Success -> {
+				dataAnalyze(data.dataCurrent)
 			}
 		}
 	}
 
 	private fun dataAnalyze(data: List<Weather>) {
-		if (coordinates > 0) adapter.setData(data)
-		else openAbout(data.random(), true)
+		adapter.setData(data)
+		binding.loadingLayout.visibility = View.GONE
+	}
+
+	private fun dataAnalyze(data: Weather) {
+		openAbout(data, coordinates==0)
 		binding.loadingLayout.visibility = View.GONE
 	}
 
@@ -113,6 +121,6 @@ class WindowList : Fragment(), ItemListClick {
 			}
 	}
 
-	override fun onItemClick(weather: Weather) = openAbout(weather, false)
+	override fun onItemClick(weather: Weather) = viewModel.getWeather(weather)
 
 }

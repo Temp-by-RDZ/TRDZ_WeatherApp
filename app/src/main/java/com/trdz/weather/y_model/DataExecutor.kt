@@ -24,47 +24,28 @@ class DataExecutor : Repository {
 		}
 	}
 
-	override fun getTemporalData(): List<Weather> {
-		return getData()
-	}
-
-	override fun getData(): List<Weather> {
-		save()
-		return getPossibilities()
-	}
-
+	override fun getEurope() = listEurope()
+	override fun getAsia() = listAsia()
+	override fun getAfrica() = listAfrica()
+	override fun getOther() = listOther()
 
 	fun needReload(): Boolean {
 		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 	}
 
-	fun connection() {
+	fun connection(serverListener: ServerResponse, weather: Weather) {
 		process = 0
 		Thread {
-			while (process < 100) {
-				sleep(66L);
-				if ((Math.random() * 100).toInt() < 99) process++
-				else {
-					process = -1; break
-				}
-			}
-		}.start()
-	}
-
-	fun connectionFast(serverListener: ServerResponse, lan:Double = -666.0, lon:Double = -666.0) {
-		process = 0
-		Thread {
-			val serverStatus = ServerReceiver().load(lan,lon)
+			val serverStatus = ServerReceiver().load(weather.city.lat,weather.city.lon)
 			serverListener.newTarget(29)
 			sleep(10L)
-			if (serverStatus.result!=null)	serverListener.putCurrent(makeCurrent(serverStatus.result))
+			if (serverStatus.result != null)	serverListener.put(makeCurrent(weather,serverStatus.result))
 			else serverListener.error(serverStatus.code)
 		}.start()
 	}
 
-	private fun makeCurrent(data: AboutWeather): Weather {
-		return Weather(City("",data.info.lat.toFloat(),data.info.lon.toFloat()),data.fact.temp,data.fact.feels_like)
+	private fun makeCurrent(weather: Weather, data: AboutWeather): Weather {
+		return weather.copy(city = City(weather.city.name,data.info.lat,data.info.lon), temperature = data.fact.temp, sumare = data.fact.feels_like)
 	}
 
-	fun status() = process
 }

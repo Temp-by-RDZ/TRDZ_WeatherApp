@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view
+package com.trdz.weather.w_view.windows
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowStartBinding
+import com.trdz.weather.w_view.Leader
+import com.trdz.weather.w_view.MainActivity
 
 class WindowStart : Fragment(), View.OnClickListener {
 

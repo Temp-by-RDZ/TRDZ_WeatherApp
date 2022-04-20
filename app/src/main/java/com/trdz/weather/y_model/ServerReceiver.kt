@@ -21,7 +21,7 @@ class ServerReceiver() {
 			append(DOMAIN)
 			append(PACKAGE)
 			append(PARAM1)
-			if (plon != -666.0) {
+			if (plon != 666.0) {
 			val lat = Math.max(-90.0,Math.min(plat, 90.0))
 			val lon = Math.max(-180.0,Math.min(plon, 180.0))
 			append("=")

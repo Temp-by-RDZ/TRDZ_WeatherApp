@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view
+package com.trdz.weather.w_view.windows
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,7 +42,7 @@ class WindowMain : Fragment() {
 
 	private fun renderData(data: Weather) {
 		with(binding) {
-			if (data.city.name != "") message.text = data.city.name
+			message.text = data.city.name
 			coordinates.text = StringBuilder("${data.city.lat} ").append("${data.city.lon}").toString()
 			feelsLikeValue.text = data.sumare.toString()
 			temperatureValue.text = data.temperature.toString()

@@ -3,6 +3,7 @@ package com.trdz.weather.w_view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.trdz.weather.R
+import com.trdz.weather.w_view.windows.WindowStart
 
 class MainActivity : AppCompatActivity(), Leader {
 
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity(), Leader {
 		super.onDestroy()
 	}
 
-	override fun onBackPressed() { /*nothing*/  }
+	override fun onBackPressed() { /*nothing*/ }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)

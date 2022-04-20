@@ -1,6 +1,8 @@
 package com.trdz.weather.y_model
 
 interface Repository {
-	fun getTemporalData():List<Weather>
-	fun getData():List<Weather>
+	fun getEurope():List<Weather>
+	fun getAsia():List<Weather>
+	fun getAfrica():List<Weather>
+	fun getOther():List<Weather>
 }

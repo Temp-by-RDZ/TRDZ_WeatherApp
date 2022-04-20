@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".w_view.WindowStart">
+    tools:context=".w_view.windows.WindowStart">
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/b_start_me"
