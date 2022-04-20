@@ -22,8 +22,8 @@ class ServerReceiver() {
 			append(PACKAGE)
 			append(PARAM1)
 			if (plon != 666.0) {
-			val lat = Math.max(-90.0,Math.min(plat, 90.0))
-			val lon = Math.max(-180.0,Math.min(plon, 180.0))
+			val lat = Math.max(-89.90,Math.min(plat, 89.90))
+			val lon = Math.max(-179.90,Math.min(plon, 179.90))
 			append("=")
 			append(lat)
 			append("&")
@@ -42,8 +42,8 @@ class ServerReceiver() {
 		try {
 			responseCode = urlConnection.responseCode
 			if (responseCode < 300) {
-				val headers = urlConnection.headerFields
-				val responseMessage = urlConnection.responseMessage
+				// val headers = urlConnection.headerFields
+				// val responseMessage = urlConnection.responseMessage
 
 				val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
 				val aboutWeather: AboutWeather = Gson().fromJson(buffer, AboutWeather::class.java)

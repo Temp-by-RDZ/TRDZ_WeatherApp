@@ -17,17 +17,17 @@ class DataExecutor : Repository {
 		_sharedPreference = sharedPreferences
 	}
 
+	override fun getEurope() = listEurope()
+	override fun getAsia() = listAsia()
+	override fun getAfrica() = listAfrica()
+	override fun getOther() = listOther()
+
 	private fun save() {
 		sharedPreference.edit().run {
 			putInt("LAST_LOAD", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 			apply()
 		}
 	}
-
-	override fun getEurope() = listEurope()
-	override fun getAsia() = listAsia()
-	override fun getAfrica() = listAfrica()
-	override fun getOther() = listOther()
 
 	fun needReload(): Boolean {
 		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
@@ -38,7 +38,7 @@ class DataExecutor : Repository {
 		Thread {
 			val serverStatus = ServerReceiver().load(weather.city.lat,weather.city.lon)
 			serverListener.newTarget(29)
-			sleep(10L)
+			sleep(15L)
 			if (serverStatus.result != null)	serverListener.put(makeCurrent(weather,serverStatus.result))
 			else serverListener.error(serverStatus.code)
 		}.start()
