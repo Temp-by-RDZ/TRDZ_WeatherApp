@@ -20,21 +20,23 @@ class ServerReceiver() {
 		val uri = URL(StringBuilder("").apply {
 			append(DOMAIN)
 			append(PACKAGE)
-			append(PARAM1)
 			if (plon != 666.0) {
-			val lat = Math.max(-89.90,Math.min(plat, 89.90))
-			val lon = Math.max(-179.90,Math.min(plon, 179.90))
-			append("=")
-			append(lat)
-			append("&")
-			append(PARAM2)
-			append("=")
-			append(lon) } }.toString())
+				val lat = Math.max(-89.90, Math.min(plat, 89.90))
+				val lon = Math.max(-179.90, Math.min(plon, 179.90))
+				append(PARAM1)
+				append("=")
+				append(lat)
+				append("&")
+				append(PARAM2)
+				append("=")
+				append(lon)
+			}
+		}.toString())
 
-		val urlConnection: HttpsURLConnection = (uri.openConnection() as HttpsURLConnection).apply {
+		val urlConnection: HttpURLConnection = (uri.openConnection() as HttpURLConnection).apply {
 			connectTimeout = 1000
 			readTimeout = 1000
-			addRequestProperty(LOGIN,BuildConfig.WEATHER_API_KEY)
+			addRequestProperty(LOGIN, BuildConfig.WEATHER_API_KEY)
 		}
 		Thread.sleep(500);
 
@@ -50,8 +52,12 @@ class ServerReceiver() {
 				return ServerStatus(responseCode, aboutWeather)
 			}
 		}
-		catch (Ignored: JsonSyntaxException) { return ServerStatus(responseCode) }
-		finally { urlConnection.disconnect() }
+		catch (Ignored: JsonSyntaxException) {
+			return ServerStatus(responseCode)
+		}
+		finally {
+			urlConnection.disconnect()
+		}
 		return ServerStatus(responseCode)
 
 	}

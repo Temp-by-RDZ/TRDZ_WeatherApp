@@ -4,9 +4,8 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.trdz.weather.y_model.City
-import com.trdz.weather.y_model.DataExecutor
-import com.trdz.weather.y_model.Weather
+import com.trdz.weather.R
+import com.trdz.weather.y_model.*
 import com.trdz.weather.y_model.dto.AboutWeather
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
 import java.lang.Thread.sleep
@@ -23,16 +22,16 @@ class MainViewModel(
 		repository.link(sharedPreferences)
 	}
 
-	fun getWeather(weather: Weather = Weather(City("Текущее местоположение",666.0,666.0))) {
+	fun getWeather(weather: Weather = Weather(currentCity())) {
 		quest = 1
 		status = 0
 		Thread {
 			dataLive.postValue(StatusProcess.Load)
-			quest +=79
+			quest += 79
 			repository.connection(this@MainViewModel, weather)
 			do {
 				sleep(5L)
-				if (status<(quest-1)) status++
+				if (status < (quest - 1)) status++
 				dataLive.postValue(StatusProcess.Loading(status))
 			} while (status > -1 && status < 99)
 		}.start()
