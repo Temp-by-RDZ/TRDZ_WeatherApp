@@ -4,9 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.trdz.weather.R
 import com.trdz.weather.y_model.*
-import com.trdz.weather.y_model.dto.AboutWeather
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
 import java.lang.Thread.sleep
 
@@ -18,16 +16,19 @@ class MainViewModel(
 	var status: Int = 0
 	var quest: Int = 0
 
+	fun getData(): LiveData<StatusProcess> {
+		return dataLive
+	}
+
 	fun initialize(sharedPreferences: SharedPreferences) {//Времееное применение для теста!!!
 		repository.link(sharedPreferences)
 	}
 
 	fun getWeather(weather: Weather = Weather(currentCity())) {
-		quest = 1
 		status = 0
 		Thread {
 			dataLive.postValue(StatusProcess.Load)
-			quest += 79
+			quest = 90
 			repository.connection(this@MainViewModel, weather)
 			do {
 				sleep(5L)
@@ -35,10 +36,6 @@ class MainViewModel(
 				dataLive.postValue(StatusProcess.Loading(status))
 			} while (status > -1 && status < 99)
 		}.start()
-	}
-
-	fun getData(): LiveData<StatusProcess> {
-		return dataLive
 	}
 
 	fun getWeatherList(id: Int) {
@@ -51,7 +48,7 @@ class MainViewModel(
 	}
 
 	override fun newTarget(target: Int) {
-		quest += target
+		quest = target
 	}
 
 	override fun put(data: Weather) {
@@ -59,8 +56,8 @@ class MainViewModel(
 		dataLive.postValue(StatusProcess.Success(data))
 	}
 
-	override fun error(error: Int) {
+	override fun error(error: Int,weatherBad: Weather) {
 		status = -100
-		dataLive.postValue(StatusProcess.Error(Weather(), error, IllegalAccessError()))
+		dataLive.postValue(StatusProcess.Error(weatherBad, Weather(), error, IllegalAccessError()))
 	}
 }

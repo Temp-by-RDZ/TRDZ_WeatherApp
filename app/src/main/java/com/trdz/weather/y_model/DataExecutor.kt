@@ -8,8 +8,6 @@ import java.util.*
 
 class DataExecutor : Repository {
 
-	private var process = 0
-
 	private var _sharedPreference: SharedPreferences? = null
 	private val sharedPreference get() = _sharedPreference!!
 
@@ -34,13 +32,12 @@ class DataExecutor : Repository {
 	}
 
 	fun connection(serverListener: ServerResponse, weather: Weather) {
-		process = 0
 		Thread {
 			val serverStatus = ServerReceiver().load(weather.city.lat,weather.city.lon)
-			serverListener.newTarget(29)
-			sleep(15L)
-			if (serverStatus.result != null)	serverListener.put(makeCurrent(weather,serverStatus.result))
-			else serverListener.error(serverStatus.code)
+			serverListener.newTarget(100)
+			sleep(30L)
+			if (serverStatus.result != null) serverListener.put(makeCurrent(weather,serverStatus.result))
+			else serverListener.error(serverStatus.code,weather)
 		}.start()
 	}
 

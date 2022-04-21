@@ -81,7 +81,7 @@ class WindowList : Fragment(), ItemListClick {
 						if (binding.loadingLayout.error_found.isChecked) {
 							openAbout(data.dataPast, true)
 							binding.loadingLayout.visibility = View.GONE}
-						else startSearch()
+						else viewModel.getWeather(data.dataProblematic)
 					}
 				}
 			}

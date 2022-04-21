@@ -33,12 +33,12 @@ class ServerReceiver() {
 			}
 		}.toString())
 
-		val urlConnection: HttpURLConnection = (uri.openConnection() as HttpURLConnection).apply {
+		val urlConnection: HttpsURLConnection = (uri.openConnection() as HttpsURLConnection).apply {
 			connectTimeout = 1000
 			readTimeout = 1000
 			addRequestProperty(LOGIN, BuildConfig.WEATHER_API_KEY)
 		}
-		Thread.sleep(500);
+		Thread.sleep(300);
 
 
 		try {
