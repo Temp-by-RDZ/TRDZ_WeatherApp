@@ -1,20 +1,17 @@
 package com.trdz.weather.x_view_model
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.trdz.weather.y_model.*
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
-import java.lang.Thread.sleep
 
 class MainViewModel(
 	private val dataLive: MutableLiveData<StatusProcess> = MutableLiveData(),
 	private val repository: DataExecutor = DataExecutor(),
 ) : ViewModel(), ServerResponse {
-
-	var status: Int = 0
-	var quest: Int = 0
 
 	fun getData(): LiveData<StatusProcess> {
 		return dataLive
@@ -25,20 +22,18 @@ class MainViewModel(
 	}
 
 	fun getWeather(weather: Weather = Weather(currentCity())) {
-		status = 0
-		Thread {
-			dataLive.postValue(StatusProcess.Load)
-			quest = 90
-			repository.connection(this@MainViewModel, weather)
-			do {
-				sleep(5L)
-				if (status < (quest - 1)) status++
-				dataLive.postValue(StatusProcess.Loading(status))
-			} while (status > -1 && status < 99)
-		}.start()
+		dataLive.postValue(StatusProcess.Load)
+		repository.connection(this@MainViewModel, weather)
+		// Пришлось заменить подход ради лучшей синхронизации
+		// так как оказалось что паралельные обращения в обсервере перезаписываются с опасной частотой
+	}
+
+	fun repeat(weather: Weather = Weather(currentCity())) {
+		repository.connection(this@MainViewModel, weather)
 	}
 
 	fun getWeatherList(id: Int) {
+		Log.d("@@@", "Mod - list request")
 		when (id) {
 			1 -> dataLive.postValue(StatusProcess.TransferList(repository.getAsia()))
 			2 -> dataLive.postValue(StatusProcess.TransferList(repository.getAfrica()))
@@ -48,16 +43,16 @@ class MainViewModel(
 	}
 
 	override fun newTarget(target: Int) {
-		quest = target
+		dataLive.postValue(StatusProcess.Loading(target))
 	}
 
 	override fun put(data: Weather) {
-		status = 100
+		Log.d("@@@", "Mod - get success answer")
 		dataLive.postValue(StatusProcess.Success(data))
 	}
 
-	override fun error(error: Int,weatherBad: Weather) {
-		status = -100
+	override fun error(error: Int, weatherBad: Weather) {
+		Log.d("@@@", "Mod - get bad answer")
 		dataLive.postValue(StatusProcess.Error(weatherBad, Weather(), error, IllegalAccessError()))
 	}
 }

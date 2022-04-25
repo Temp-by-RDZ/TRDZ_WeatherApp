@@ -1,9 +1,9 @@
 package com.trdz.weather.y_model
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.trdz.weather.x_view_model.ServerResponse
 import com.trdz.weather.y_model.dto.AboutWeather
-import java.lang.Thread.sleep
 import java.util.*
 
 class DataExecutor : Repository {
@@ -20,22 +20,24 @@ class DataExecutor : Repository {
 	override fun getAfrica() = listAfrica()
 	override fun getOther() = listOther()
 
-	private fun save() {
+	private fun save() {	//Будущее сохранение успешного обращения
 		sharedPreference.edit().run {
 			putInt("LAST_LOAD", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 			apply()
 		}
 	}
 
-	fun needReload(): Boolean {
+	fun needReload(): Boolean { //Будущее обращение к наличию сохраненного обращения
 		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 	}
 
 	fun connection(serverListener: ServerResponse, weather: Weather) {
+		Log.d("@@@", "Rep - start connection")
 		Thread {
 			val serverStatus = ServerReceiver().load(weather.city.lat,weather.city.lon)
 			serverListener.newTarget(100)
-			sleep(30L)
+			// Здесь будет обработка с сохранением примерных координат и времени запроса
+			Log.d("@@@", "Rep - get result with code:"+serverStatus.code.toString())
 			if (serverStatus.result != null) serverListener.put(makeCurrent(weather,serverStatus.result))
 			else serverListener.error(serverStatus.code,weather)
 		}.start()

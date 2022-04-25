@@ -2,6 +2,7 @@ package com.trdz.weather.x_view_model
 
 import android.app.IntentService
 import android.content.Intent
+import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.trdz.weather.y_model.Weather
 import com.trdz.weather.z_utility.SERVICE_BROAD
@@ -10,14 +11,18 @@ import com.trdz.weather.z_utility.SERVICE_SETTER
 
 class Exchanger(val name: String = "") : IntentService(name) {
 	override fun onHandleIntent(intent: Intent?) {
-		// Rep -S-> ViewMain не подходит там уже обсервер с возможностью рестарта и без ухода с фрагмента
-		// Rep -S-> ViewModel не подходит VM придерживается безконтекстного режима
-		// ViewList -S-> ViewMain? или ViewList -S-> ViewList?
+		/*
+		Не совсем ясно преимущество добавления данного подхода в поставленную задачу
+		 - ViewModel -S-> Rep 		VM придерживается безконтекстного режима
+		 - Rep -S-> ?				никакого контескта в репозитории быть не должно по этому нельзя
+		 - ViewList -S-> ViewList 	так будет разделен репозиторий и данные с сервера который хорошо было бы обработать
+		 - ViewList -S-> ViewMain?	Это похоже на вариант - обмен между фрагментами без видимх переходов
+		 Или лучше было бы перестроить структуру под работу с Серивисом?
+		 */
 		intent?.let {
+			Log.d("@@@", "Service transfer data")
 			val weather = it.getParcelableExtra<Weather>(SERVICE_GETTER)
-			val message = Intent(SERVICE_BROAD)
-			message.putExtra(SERVICE_SETTER, weather)
-			LocalBroadcastManager.getInstance(this).sendBroadcast(message)
+			LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(SERVICE_BROAD).putExtra(SERVICE_SETTER,weather))
 		}
 	}
 }

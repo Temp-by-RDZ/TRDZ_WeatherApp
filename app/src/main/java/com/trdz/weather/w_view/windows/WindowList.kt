@@ -1,7 +1,11 @@
 package com.trdz.weather.w_view.windows
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +13,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
 import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowListBinding
 import com.trdz.weather.w_view.*
+import com.trdz.weather.x_view_model.Exchanger
 import com.trdz.weather.y_model.Weather
 import com.trdz.weather.z_utility.*
 import com.trdz.weather.x_view_model.StatusProcess
@@ -31,6 +35,8 @@ class WindowList : Fragment(), ItemListClick {
 
 	private val adapter = WindowListAdapter(this)
 	private var coordinates: Int = 0
+	private var status: Int = 0
+	private var quest: Int = 0
 
 	override fun onDestroyView() {
 		super.onDestroyView()
@@ -69,30 +75,55 @@ class WindowList : Fragment(), ItemListClick {
 	private fun renderData(data: StatusProcess) {
 		when (data) {
 			StatusProcess.Load -> {
+				openAbout(coordinates==0)
+				Log.d("@@@", "App - start data loading")
 				binding.loadingLayout.visibility = View.VISIBLE
 				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
+				startTimer()
 			}
 			is StatusProcess.Loading -> {
-				binding.progressBar.text = data.progress.toString()
+				Log.d("@@@", "App - update loading stage")
+				quest = data.progress
+
 			}
 			is StatusProcess.Error -> {
+				status = -99
+				Log.d("@@@", "App - error"+data.code)
 				binding.loadingLayout.error_found.visibility = View.VISIBLE
 				binding.mainView.showSnackBar(getString(R.string.t_error) + "  " + data.code + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
 					action(R.string.t_repeat) {
 						if (binding.loadingLayout.error_found.isChecked) {
-							openAbout(data.dataPast, true)
-							binding.loadingLayout.visibility = View.GONE}
-						else viewModel.getWeather(data.dataProblematic)
+							requireActivity().startService(Intent(requireContext(),Exchanger::class.java).apply { putExtra(SERVICE_GETTER,data.dataPast) })
+							status=100}
+						else {
+							status=1
+							quest =90
+							viewModel.repeat(data.dataProblematic)}
 					}
 				}
 			}
 			is StatusProcess.TransferList -> {
+				Log.d("@@@", "App - get list")
 				dataAnalyze(data.dataAll)
 			}
 			is StatusProcess.Success -> {
+				Log.d("@@@", "App - success")
 				dataAnalyze(data.dataCurrent)
 			}
 		}
+	}
+
+	private fun startTimer() {
+		status = 0
+		Thread {
+			quest = 90
+			do {
+				Thread.sleep(5L)
+				if (status > -1 && status!=100) status=Math.min(status+1,quest-1)
+				Handler(Looper.getMainLooper()).post { binding.progressBar.text = status.toString() }
+			} while (status < 100)
+			Handler(Looper.getMainLooper()).post { binding.loadingLayout.visibility = View.GONE }
+		}.start()
 	}
 
 	private fun dataAnalyze(data: List<Weather>) {
@@ -101,14 +132,12 @@ class WindowList : Fragment(), ItemListClick {
 	}
 
 	private fun dataAnalyze(data: Weather) {
-		openAbout(data, coordinates==0)
-		binding.loadingLayout.visibility = View.GONE
+		requireActivity().startService(Intent(requireContext(),Exchanger::class.java).apply { putExtra(SERVICE_GETTER,data) })
 	}
 
-	private fun openAbout(data: Weather, isFast: Boolean) {
-		executors.getNavigation().add(requireActivity().supportFragmentManager, WindowMain.newInstance(Bundle().apply {
+	private fun openAbout(isFast: Boolean) {
+		executors.getNavigation().add(requireActivity().supportFragmentManager, WindowDetails.newInstance(Bundle().apply {
 			putBoolean(W_FAST_BUNDLE, isFast)
-			putParcelable(W_MAIN_BUNDLE, data)
 		}))
 	}
 

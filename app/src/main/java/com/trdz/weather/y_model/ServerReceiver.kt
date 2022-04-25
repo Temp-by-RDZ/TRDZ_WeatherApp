@@ -8,7 +8,6 @@ import com.trdz.weather.z_utility.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.StringBuilder
-import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
@@ -36,7 +35,7 @@ class ServerReceiver() {
 		val urlConnection: HttpsURLConnection = (uri.openConnection() as HttpsURLConnection).apply {
 			connectTimeout = 1000
 			readTimeout = 1000
-			addRequestProperty(LOGIN, BuildConfig.WEATHER_API_KEY)
+			addRequestProperty(API_KEY, BuildConfig.WEATHER_API_KEY)
 		}
 		Thread.sleep(300);
 
