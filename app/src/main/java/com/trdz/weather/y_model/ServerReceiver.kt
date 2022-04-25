@@ -11,17 +11,15 @@ import java.lang.StringBuilder
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-class ServerReceiver() {
+class ServerReceiver():ExternalSource {
 
-	fun load(plat: Double, plon: Double): ServerStatus {
+	override fun load(lat: Double, lon: Double): ServerStatus {
 		var responseCode = 0
 
 		val uri = URL(StringBuilder("").apply {
 			append(DOMAIN)
 			append(PACKAGE)
-			if (plon != 666.0) {
-				val lat = Math.max(-89.90, Math.min(plat, 89.90))
-				val lon = Math.max(-179.90, Math.min(plon, 179.90))
+			if (lon != ERROR_NUMBER) {
 				append(PARAM1)
 				append("=")
 				append(lat)

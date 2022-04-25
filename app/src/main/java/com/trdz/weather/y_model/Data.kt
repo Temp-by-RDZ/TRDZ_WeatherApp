@@ -1,6 +1,7 @@
 package com.trdz.weather.y_model
 
 import android.os.Parcelable
+import com.trdz.weather.z_utility.ERROR_NUMBER
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -10,7 +11,7 @@ data class Weather(val city: City = defaultCity(), val temperature: Int = -69, v
 data class City(var name: String, val lat: Double, val lon: Double) : Parcelable
 
 fun defaultCity() = City("Атлантида", 31.254167, -24.254167)
-fun currentCity() = City("Текущее местоположение", 666.0, 666.0)
+fun currentCity() = City("Текущее местоположение", ERROR_NUMBER, ERROR_NUMBER)
 
 fun listEurope() = listOf(
 	Weather(City("Амстердам", 52.37, 4.89)),
