@@ -52,7 +52,7 @@ class DataExecutor : Repository {
 	}
 
 	private fun makeCurrent(weather: Weather, data: AboutWeather): Weather {
-		return weather.copy(city = City(weather.city.name,data.info.lat,data.info.lon), temperature = data.fact.temp, sumare = data.fact.feels_like)
+		return weather.copy(city = City(weather.city.name,data.info.lat,data.info.lon), temperature = data.fact.temp, sumare = data.fact.feels_like, icon = data.fact.icon)
 	}
 
 }

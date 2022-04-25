@@ -15,6 +15,7 @@ import com.trdz.weather.y_model.Weather
 import com.trdz.weather.z_utility.SERVICE_BROAD
 import com.trdz.weather.z_utility.SERVICE_SETTER
 import com.trdz.weather.z_utility.W_FAST_BUNDLE
+import com.trdz.weather.z_utility.loadSvg
 
 class WindowDetails : Fragment() {
 
@@ -61,6 +62,12 @@ class WindowDetails : Fragment() {
 			feelsLikeValue.text = data.sumare.toString()
 			temperatureValue.text = data.temperature.toString()
 			details.visibility = View.VISIBLE
+			/*
+			Glide.with(requireContext()).load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(headerIcon)
+			Picasso.get()?.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")?.into(headerIcon)
+			headerCityIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")*/
+
+			icon.loadSvg("https://yastatic.net/weather/i/icons/blueye/color/svg/${data.icon}.svg")
 		}
 	}
 

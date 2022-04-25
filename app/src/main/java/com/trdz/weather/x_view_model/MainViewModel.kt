@@ -23,7 +23,7 @@ class MainViewModel(
 
 	fun getWeather(weather: Weather = Weather(currentCity())) {
 		dataLive.postValue(StatusProcess.Load)
-		repository.connection(this@MainViewModel, weather)
+		repeat(weather)
 		// Пришлось заменить подход ради лучшей синхронизации
 		// так как оказалось что паралельные обращения в обсервере перезаписываются с опасной частотой
 	}
