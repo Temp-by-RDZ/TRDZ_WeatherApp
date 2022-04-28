@@ -1,5 +1,6 @@
 package com.trdz.weather.w_view.windows
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowStartBinding
 import com.trdz.weather.w_view.Leader
 import com.trdz.weather.w_view.MainActivity
+import com.trdz.weather.z_utility.OPTIONS_KEY
+import com.trdz.weather.z_utility.PARAM_POS_KEY
 
 class WindowStart : Fragment(), View.OnClickListener {
 
@@ -32,6 +35,7 @@ class WindowStart : Fragment(), View.OnClickListener {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		buttonBinds()
+		teleport()
 	}
 
 	private fun buttonBinds() {
@@ -40,6 +44,11 @@ class WindowStart : Fragment(), View.OnClickListener {
 		binding.bStartAfrica.setOnClickListener(this)
 		binding.bStartEurope.setOnClickListener(this)
 		binding.bStartOther.setOnClickListener(this)
+	}
+
+	private fun teleport() {
+		val waypoint = requireActivity().getSharedPreferences(OPTIONS_KEY,Context.MODE_PRIVATE).getInt(PARAM_POS_KEY,-1)
+		if (waypoint>-1) executors.getNavigation().add(requireActivity().supportFragmentManager, WindowList.newInstance(waypoint))
 	}
 
 	private fun getCord(type: View?): Int {

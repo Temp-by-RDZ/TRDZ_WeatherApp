@@ -46,7 +46,7 @@ class ServerReceiver():ExternalSource {
 
 				val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
 				val aboutWeather: AboutWeather = Gson().fromJson(buffer, AboutWeather::class.java)
-				return ServerStatus(responseCode, aboutWeather)
+				return ServerStatus(responseCode, toWeather(aboutWeather))
 			}
 		}
 		catch (Ignored: JsonSyntaxException) {

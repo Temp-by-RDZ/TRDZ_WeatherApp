@@ -17,7 +17,7 @@ interface ServerRetrofitApi {
 	): Call<AboutWeather>
 }
 interface ServerRetrofitDynamicApi {
-	@GET(PACKAGE) // Только endpoint!!!!
+	@GET(PACKAGE)
 	fun getWeather(
 		@Header(API_KEY) apikey: String
 	): Call<AboutWeather>

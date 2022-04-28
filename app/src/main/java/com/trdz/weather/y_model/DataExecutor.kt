@@ -1,37 +1,40 @@
 package com.trdz.weather.y_model
 
-import android.content.SharedPreferences
 import android.util.Log
+import com.trdz.weather.MyApp
 import com.trdz.weather.x_view_model.ServerResponse
-import com.trdz.weather.y_model.dto.AboutWeather
 import com.trdz.weather.z_utility.ERROR_NUMBER
+import com.trdz.weather.z_utility.toEntity
 import java.util.*
 
 class DataExecutor : Repository {
 
-	private var _sharedPreference: SharedPreferences? = null
-	private val sharedPreference get() = _sharedPreference!!
 	private val externalSource1: ExternalSource = ServerReceiver()
 	private val externalSource2: ExternalSource = ServerRetrofit()
-
-	fun link(sharedPreferences: SharedPreferences) {
-		_sharedPreference = sharedPreferences
-	}
+	private val externalSource3: ExternalSource = ServerRoom()
 
 	override fun getEurope() = listEurope()
 	override fun getAsia() = listAsia()
 	override fun getAfrica() = listAfrica()
 	override fun getOther() = listOther()
 
-	private fun save() {	//Будущее сохранение успешного обращения
-		sharedPreference.edit().run {
-			putInt("LAST_LOAD", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
-			apply()
-		}
+	private fun save(weather: Weather) {
+		Log.d("@@@", "!Added Gen: "+(Calendar.getInstance().get(Calendar.YEAR)*1000+Calendar.getInstance().get(Calendar.DAY_OF_YEAR)).toLong())
+		MyApp.getHistoryDao().insert(toEntity((Calendar.getInstance().get(Calendar.YEAR)*1000+Calendar.getInstance().get(Calendar.DAY_OF_YEAR)).toLong(),weather))
 	}
 
-	fun needReload(): Boolean { //Будущее обращение к наличию сохраненного обращения
-		return (sharedPreference.getInt("LAST_LOAD", 0) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+	private fun needReload(lat:Double, lon:Double): Boolean {
+		val result = MyApp.getHistoryDao().getHistoryForCity((Calendar.getInstance().get(Calendar.YEAR)*1000+Calendar.getInstance().get(Calendar.DAY_OF_YEAR)).toLong())
+		if (result.isNotEmpty()) {
+			result.forEach {
+				if (lat==it.lat) {
+					if (lon==it.lon) {
+						return false
+					}
+				}
+			}
+		}
+		return true
 	}
 
 	fun connection(serverListener: ServerResponse, weather: Weather) {
@@ -39,20 +42,33 @@ class DataExecutor : Repository {
 		Thread {
 			var lat = weather.city.lat
 			var lon = weather.city.lon
+			if (!needReload(lat,lon)) {
+				Log.d("@@@", "Rep - data found")
+				serverListener.put(getLast(weather))
+				return@Thread
+			}
 			if (weather.city.lat != ERROR_NUMBER) {
 				lat = Math.max(-89.90, Math.min(weather.city.lat, 89.90))
 				lon = Math.max(-179.90, Math.min(weather.city.lon, 179.90))}
 			val serverStatus = externalSource2.load(lat,lon)
 			serverListener.newTarget(100)
-			// Здесь будет обработка с сохранением примерных координат и времени запроса
 			Log.d("@@@", "Rep - get result with code:"+serverStatus.code.toString())
-			if (serverStatus.result != null) serverListener.put(makeCurrent(weather,serverStatus.result))
-			else serverListener.error(serverStatus.code,weather)
+			if (serverStatus.result != null) {
+				val result = makeCurrent(weather,serverStatus.result)
+				save(result)
+				serverListener.put(result)
+			}
+			else serverListener.error(serverStatus.code,getLast(weather))
 		}.start()
 	}
 
-	private fun makeCurrent(weather: Weather, data: AboutWeather): Weather {
-		return weather.copy(city = City(weather.city.name,data.info.lat,data.info.lon), temperature = data.fact.temp, sumare = data.fact.feels_like, icon = data.fact.icon)
+	private fun getLast(weather: Weather): Weather {
+		val result = externalSource3.load(weather.city.lat,weather.city.lon)
+		return if (result.result!=null) makeCurrent(weather,result.result)
+		else Weather(City("Ошибка подключениея",000.0,000.0),666,999)
 	}
 
+	private fun makeCurrent(weather: Weather, data: Weather): Weather {
+		return weather.copy(city = City(weather.city.name,data.city.lat,data.city.lon), temperature = data.temperature, sumare = data.sumare, icon = data.icon)
+	}
 }

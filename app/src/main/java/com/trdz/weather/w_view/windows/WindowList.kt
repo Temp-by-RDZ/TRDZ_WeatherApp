@@ -59,12 +59,17 @@ class WindowList : Fragment(), ItemListClick {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.BBack.setOnClickListener { requireActivity().supportFragmentManager.popBackStack() }
+		binding.BBack.setOnClickListener {
+			rememberChose(-1); requireActivity().supportFragmentManager.popBackStack() }
 		binding.recycleList.adapter = adapter
 		val observer = Observer<StatusProcess> { renderData(it) }
 		viewModel.getData().observe(viewLifecycleOwner, observer)
-		viewModel.initialize(requireActivity().getSharedPreferences("BIG", Context.MODE_PRIVATE))//Времееное применение для теста!!!
+		rememberChose(coordinates)
 		startSearch()
+	}
+
+	private fun rememberChose(chose:Int) {
+		requireActivity().getSharedPreferences(OPTIONS_KEY,Context.MODE_PRIVATE).edit().putInt(PARAM_POS_KEY,chose).apply()
 	}
 
 	private fun startSearch() {
@@ -98,7 +103,7 @@ class WindowList : Fragment(), ItemListClick {
 						else {
 							status=1
 							quest =90
-							viewModel.repeat(data.dataProblematic)}
+							viewModel.repeat(data.dataPast)}
 					}
 				}
 			}
@@ -109,6 +114,7 @@ class WindowList : Fragment(), ItemListClick {
 			is StatusProcess.Success -> {
 				Log.d("@@@", "App - success")
 				dataAnalyze(data.dataCurrent)
+				status=100
 			}
 		}
 	}

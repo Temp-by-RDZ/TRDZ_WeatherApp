@@ -6,8 +6,12 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.google.android.material.snackbar.Snackbar
+import com.trdz.weather.y_model.City
+import com.trdz.weather.y_model.Weather
+import com.trdz.weather.y_model.dto.AboutWeather
+import com.trdz.weather.y_model.room.HistoryEntity
 
-	//region SnackBar
+//region SnackBar
 
 fun View.showSnackBar(message: Int, length: Int = Snackbar.LENGTH_LONG) {
 	showSnackBar(resources.getString(message), length)
@@ -49,4 +53,21 @@ fun ImageView.loadSvg(url:String){
 		.target(this)
 		.build()
 	imageLoader.enqueue(request)
+}
+
+fun toWeather(data: AboutWeather?): Weather {
+	return if (data!=null) (Weather(City("",data.info.lat,data.info.lon), data.fact.temp, data.fact.feels_like,data.fact.icon))
+	else Weather()
+	}
+
+fun toWeather(entityList: HistoryEntity): Weather {
+	return with(entityList) {
+		Weather(City(city, lat, lon), temperature, feelsLike, icon)
+	}
+}
+
+fun toEntity(code:Long, weather: Weather): HistoryEntity {
+	return with(weather) {
+		HistoryEntity(0, code, city.name, city.lat, city.lon, temperature, sumare, icon)
+	}
 }

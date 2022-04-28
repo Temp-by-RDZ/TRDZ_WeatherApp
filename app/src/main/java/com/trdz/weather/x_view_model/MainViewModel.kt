@@ -1,6 +1,5 @@
 package com.trdz.weather.x_view_model
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,15 +16,9 @@ class MainViewModel(
 		return dataLive
 	}
 
-	fun initialize(sharedPreferences: SharedPreferences) {//Времееное применение для теста!!!
-		repository.link(sharedPreferences)
-	}
-
 	fun getWeather(weather: Weather = Weather(currentCity())) {
 		dataLive.postValue(StatusProcess.Load)
 		repeat(weather)
-		// Пришлось заменить подход ради лучшей синхронизации
-		// так как оказалось что паралельные обращения в обсервере перезаписываются с опасной частотой
 	}
 
 	fun repeat(weather: Weather = Weather(currentCity())) {
@@ -53,6 +46,6 @@ class MainViewModel(
 
 	override fun error(error: Int, weatherBad: Weather) {
 		Log.d("@@@", "Mod - get bad answer")
-		dataLive.postValue(StatusProcess.Error(weatherBad, Weather(), error, IllegalAccessError()))
+		dataLive.postValue(StatusProcess.Error(weatherBad, error, IllegalAccessError()))
 	}
 }

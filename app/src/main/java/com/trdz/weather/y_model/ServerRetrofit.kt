@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import com.trdz.weather.BuildConfig
 import com.trdz.weather.z_utility.DOMAIN
 import com.trdz.weather.z_utility.ERROR_NUMBER
+import com.trdz.weather.z_utility.toWeather
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -16,7 +17,7 @@ class ServerRetrofit:ExternalSource {
 		}.build().create(ServerRetrofitApi::class.java)
 
 		val response = weatherAPI.getWeather(BuildConfig.WEATHER_API_KEY,lat,lon).execute()
-		return if (response.isSuccessful) ServerStatus(response.code(),response.body())
+		return if (response.isSuccessful) ServerStatus(response.code(),toWeather(response.body()))
 		else ServerStatus(response.code())
 		}
 
@@ -27,7 +28,7 @@ class ServerRetrofit:ExternalSource {
 		}.build().create(ServerRetrofitDynamicApi::class.java)
 
 		val response = weatherAPI.getWeather(BuildConfig.WEATHER_API_KEY).execute()
-		return if (response.isSuccessful) ServerStatus(response.code(),response.body())
+		return if (response.isSuccessful) ServerStatus(response.code(), toWeather(response.body()))
 		else ServerStatus(response.code())
 	}
 }
