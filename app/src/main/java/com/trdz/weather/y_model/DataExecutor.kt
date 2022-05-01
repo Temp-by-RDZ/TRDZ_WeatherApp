@@ -11,38 +11,19 @@ class DataExecutor : Repository {
 
 	private val externalSource1: ExternalSource = ServerReceiver()
 	private val externalSource2: ExternalSource = ServerRetrofit()
-	private val externalSource3: ExternalSource = ServerRoom()
+	private val internalData: InternalData = ServerRoom()
 
 	override fun getEurope() = listEurope()
 	override fun getAsia() = listAsia()
 	override fun getAfrica() = listAfrica()
 	override fun getOther() = listOther()
 
-	private fun save(weather: Weather) {
-		Log.d("@@@", "!Added Gen: "+(Calendar.getInstance().get(Calendar.YEAR)*1000+Calendar.getInstance().get(Calendar.DAY_OF_YEAR)).toLong())
-		MyApp.getHistoryDao().insert(toEntity((Calendar.getInstance().get(Calendar.YEAR)*1000+Calendar.getInstance().get(Calendar.DAY_OF_YEAR)).toLong(),weather))
-	}
-
-	private fun needReload(lat:Double, lon:Double): Boolean {
-		val result = MyApp.getHistoryDao().getHistoryForCity((Calendar.getInstance().get(Calendar.YEAR)*1000+Calendar.getInstance().get(Calendar.DAY_OF_YEAR)).toLong())
-		if (result.isNotEmpty()) {
-			result.forEach {
-				if (lat==it.lat) {
-					if (lon==it.lon) {
-						return false
-					}
-				}
-			}
-		}
-		return true
-	}
-
 	fun connection(serverListener: ServerResponse, weather: Weather) {
 		Log.d("@@@", "Rep - start connection")
 		Thread {
 			var lat = weather.city.lat
 			var lon = weather.city.lon
-			if (!needReload(lat,lon)) {
+			if (internalData.reloadCheckup(lat,lon)) {
 				Log.d("@@@", "Rep - data found")
 				serverListener.put(getLast(weather))
 				return@Thread
@@ -55,7 +36,7 @@ class DataExecutor : Repository {
 			Log.d("@@@", "Rep - get result with code:"+serverStatus.code.toString())
 			if (serverStatus.result != null) {
 				val result = makeCurrent(weather,serverStatus.result)
-				save(result)
+				internalData.save(result)
 				serverListener.put(result)
 			}
 			else serverListener.error(serverStatus.code,getLast(weather))
@@ -63,7 +44,7 @@ class DataExecutor : Repository {
 	}
 
 	private fun getLast(weather: Weather): Weather {
-		val result = externalSource3.load(weather.city.lat,weather.city.lon)
+		val result = internalData.load(weather.city.lat,weather.city.lon)
 		return if (result.result!=null) makeCurrent(weather,result.result)
 		else Weather(City("Ошибка подключениея",000.0,000.0),666,999)
 	}
