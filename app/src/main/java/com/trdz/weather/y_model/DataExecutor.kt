@@ -1,10 +1,8 @@
 package com.trdz.weather.y_model
 
 import android.util.Log
-import com.trdz.weather.MyApp
 import com.trdz.weather.x_view_model.ServerResponse
 import com.trdz.weather.z_utility.ERROR_NUMBER
-import com.trdz.weather.z_utility.toEntity
 import java.util.*
 
 class DataExecutor : Repository {

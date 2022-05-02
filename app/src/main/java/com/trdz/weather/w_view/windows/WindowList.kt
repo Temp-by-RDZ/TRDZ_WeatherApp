@@ -60,7 +60,8 @@ class WindowList : Fragment(), ItemListClick {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.BBack.setOnClickListener {
-			rememberChose(-1); requireActivity().supportFragmentManager.popBackStack() }
+			rememberChose(-1); requireActivity().supportFragmentManager.popBackStack()
+		}
 		binding.recycleList.adapter = adapter
 		val observer = Observer<StatusProcess> { renderData(it) }
 		viewModel.getData().observe(viewLifecycleOwner, observer)
@@ -68,8 +69,8 @@ class WindowList : Fragment(), ItemListClick {
 		startSearch()
 	}
 
-	private fun rememberChose(chose:Int) {
-		requireActivity().getSharedPreferences(OPTIONS_KEY,Context.MODE_PRIVATE).edit().putInt(PARAM_POS_KEY,chose).apply()
+	private fun rememberChose(chose: Int) {
+		requireActivity().getSharedPreferences(OPTIONS_KEY, Context.MODE_PRIVATE).edit().putInt(PARAM_POS_KEY, chose).apply()
 	}
 
 	private fun startSearch() {
@@ -80,7 +81,7 @@ class WindowList : Fragment(), ItemListClick {
 	private fun renderData(data: StatusProcess) {
 		when (data) {
 			StatusProcess.Load -> {
-				openAbout(coordinates==0)
+				openAbout(coordinates == 0)
 				Log.d("@@@", "App - start data loading")
 				binding.loadingLayout.visibility = View.VISIBLE
 				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
@@ -93,17 +94,18 @@ class WindowList : Fragment(), ItemListClick {
 			}
 			is StatusProcess.Error -> {
 				status = -99
-				Log.d("@@@", "App - error"+data.code)
+				Log.d("@@@", "App - error" + data.code)
 				binding.loadingLayout.error_found.visibility = View.VISIBLE
 				binding.mainView.showSnackBar(getString(R.string.t_error) + "  " + data.code + "  " + data.error, Snackbar.LENGTH_INDEFINITE) {
 					action(R.string.t_repeat) {
 						if (binding.loadingLayout.error_found.isChecked) {
-							requireActivity().startService(Intent(requireContext(),Exchanger::class.java).apply { putExtra(SERVICE_GETTER,data.dataPast) })
-							status=100}
-						else {
-							status=1
-							quest =90
-							viewModel.repeat(data.dataPast)}
+							requireActivity().startService(Intent(requireContext(), Exchanger::class.java).apply { putExtra(SERVICE_GETTER, data.dataPast) })
+							status = 100
+						} else {
+							status = 1
+							quest = 90
+							viewModel.repeat(data.dataPast)
+						}
 					}
 				}
 			}
@@ -114,7 +116,7 @@ class WindowList : Fragment(), ItemListClick {
 			is StatusProcess.Success -> {
 				Log.d("@@@", "App - success")
 				dataAnalyze(data.dataCurrent)
-				status=100
+				status = 100
 			}
 		}
 	}
@@ -125,7 +127,7 @@ class WindowList : Fragment(), ItemListClick {
 			quest = 90
 			do {
 				Thread.sleep(5L)
-				if (status > -1 && status!=100) status=Math.min(status+1,quest-1)
+				if (status > -1 && status != 100) status = Math.min(status + 1, quest - 1)
 				Handler(Looper.getMainLooper()).post { binding.progressBar.text = status.toString() }
 			} while (status < 100)
 			Handler(Looper.getMainLooper()).post { binding.loadingLayout.visibility = View.GONE }
@@ -138,7 +140,7 @@ class WindowList : Fragment(), ItemListClick {
 	}
 
 	private fun dataAnalyze(data: Weather) {
-		requireActivity().startService(Intent(requireContext(),Exchanger::class.java).apply { putExtra(SERVICE_GETTER,data) })
+		requireActivity().startService(Intent(requireContext(), Exchanger::class.java).apply { putExtra(SERVICE_GETTER, data) })
 	}
 
 	private fun openAbout(isFast: Boolean) {

@@ -35,7 +35,7 @@ class WindowStart : Fragment(), View.OnClickListener {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		buttonBinds()
-		teleport()
+		goToLastPosition()
 	}
 
 	private fun buttonBinds() {
@@ -46,7 +46,7 @@ class WindowStart : Fragment(), View.OnClickListener {
 		binding.bStartOther.setOnClickListener(this)
 	}
 
-	private fun teleport() {
+	private fun goToLastPosition() {
 		val waypoint = requireActivity().getSharedPreferences(OPTIONS_KEY,Context.MODE_PRIVATE).getInt(PARAM_POS_KEY,-1)
 		if (waypoint>-1) executors.getNavigation().add(requireActivity().supportFragmentManager, WindowList.newInstance(waypoint))
 	}
