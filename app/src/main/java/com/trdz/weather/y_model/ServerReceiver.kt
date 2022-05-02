@@ -1,20 +1,25 @@
 package com.trdz.weather.y_model
 
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.trdz.weather.BuildConfig
+import com.trdz.weather.w_view.windows.WindowListAdapter
 import com.trdz.weather.y_model.dto.AboutWeather
 import com.trdz.weather.z_utility.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.StringBuilder
 import java.net.URL
+import java.util.concurrent.TimeoutException
 import javax.net.ssl.HttpsURLConnection
 
 class ServerReceiver():ExternalSource {
 
 	override fun load(lat: Double, lon: Double): ServerStatus {
-		var responseCode = 0
+		var responseCode = -1
 
 		val uri = URL(StringBuilder("").apply {
 			append(DOMAIN)
@@ -35,17 +40,20 @@ class ServerReceiver():ExternalSource {
 			readTimeout = 1000
 			addRequestProperty(API_KEY, BuildConfig.WEATHER_API_KEY)
 		}
-		Thread.sleep(300);
 
+		try { responseCode = urlConnection.responseCode }
+		catch (Ignored: Exception) {
+			Log.d("@@@", "Ser- Connection Error")
+			return ServerStatus(responseCode) }
 
 		try {
-			responseCode = urlConnection.responseCode
-			if (responseCode < 300) {
+			if (responseCode in 1..299) {
 				// val headers = urlConnection.headerFields
 				// val responseMessage = urlConnection.responseMessage
 
 				val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
 				val aboutWeather: AboutWeather = Gson().fromJson(buffer, AboutWeather::class.java)
+
 				return ServerStatus(responseCode, toWeather(aboutWeather))
 			}
 		}

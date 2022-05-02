@@ -31,6 +31,7 @@ class DataExecutor : Repository {
 			if (weather.city.lat != ERROR_NUMBER) {
 				lat = Math.max(-89.90, Math.min(weather.city.lat, 89.90))
 				lon = Math.max(-179.90, Math.min(weather.city.lon, 179.90))}
+			Log.d("@@@", "Rep - download")
 			val serverStatus = externalSource2.load(lat,lon)
 			serverListener.newTarget(100)
 			Log.d("@@@", "Rep - get result with code:"+serverStatus.code.toString())
