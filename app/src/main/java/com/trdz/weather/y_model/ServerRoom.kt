@@ -36,8 +36,8 @@ class ServerRoom:InternalData {
 	private fun find(result: List<HistoryEntity>, lat: Double, lon: Double): Int {
 		if (result.isNotEmpty()) {
 			result.forEachIndexed { index, it ->
-				if (lat==it.lat) {
-					if (lon==it.lon) {
+				if (lat.toInt()==it.lat.toInt()) {
+					if (lon.toInt()==it.lon.toInt()) {
 						return index
 					}
 				}
