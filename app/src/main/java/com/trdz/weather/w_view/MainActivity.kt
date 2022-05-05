@@ -7,8 +7,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.trdz.weather.R
+import com.trdz.weather.w_view.windows.WindowList
 import com.trdz.weather.w_view.windows.WindowStart
-import com.trdz.weather.w_view.windows.WindowLocation
 
 class MainActivity : AppCompatActivity(), Leader {
 
@@ -50,10 +50,9 @@ class MainActivity : AppCompatActivity(), Leader {
 	}
 
 	private fun openGeo() {
-		navigation.replace(supportFragmentManager, WindowLocation.newInstance(), false)
+		navigation.add(supportFragmentManager, WindowList.newInstance(6))
 	}
 
-	override fun restartWork() {navigation.replace(supportFragmentManager, WindowStart.newInstance(), false) }
 	override fun getNavigation() = navigation
 	override fun getExecutor() = executor
 

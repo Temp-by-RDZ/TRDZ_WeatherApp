@@ -17,4 +17,11 @@
     <string name="t_location">Location</string>
     <string name="ND_OPEN">ND_OPEN</string>
     <string name="ND_CLOSE">ND_CLOSE</string>
+    <string name="t_location_success">Местоположение определенно</string>
+    <string name="t_open_details">Открыть погоду</string>
+    <string name="t_cancel_locations">Вернуться</string>
+    <string name="t_permission_title">Требуется подтверждение</string>
+    <string name="t_permission_explain"> Для вывода погоды по геолокации нужен доступ к геолокации</string>
+    <string name="t_permission_yes">Подтвердить</string>
+    <string name="t_permission_no">Запретить</string>
 </resources>

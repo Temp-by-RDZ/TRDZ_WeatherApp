@@ -1,7 +1,14 @@
 package com.trdz.weather.w_view.windows
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +18,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
@@ -22,6 +31,7 @@ import com.trdz.weather.y_model.Weather
 import com.trdz.weather.z_utility.*
 import com.trdz.weather.x_view_model.StatusProcess
 import com.trdz.weather.x_view_model.MainViewModel
+import com.trdz.weather.y_model.City
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
 
 class WindowList : Fragment(), ItemListClick {
@@ -59,14 +69,17 @@ class WindowList : Fragment(), ItemListClick {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.BBack.setOnClickListener {
-			rememberChose(-1); requireActivity().supportFragmentManager.popBackStack()
-		}
+		binding.BBack.setOnClickListener { goBack()	}
 		binding.recycleList.adapter = adapter
 		val observer = Observer<StatusProcess> { renderData(it) }
 		viewModel.getData().observe(viewLifecycleOwner, observer)
 		rememberChose(coordinates)
 		startSearch()
+	}
+
+	private fun goBack() {
+		rememberChose(-1)
+		requireActivity().supportFragmentManager.popBackStack()
 	}
 
 	private fun rememberChose(chose: Int) {
@@ -75,13 +88,14 @@ class WindowList : Fragment(), ItemListClick {
 
 	private fun startSearch() {
 		if (coordinates == 0) viewModel.getWeather()
+		else if (coordinates >5) location()
 		else viewModel.getWeatherList(coordinates)
 	}
 
 	private fun renderData(data: StatusProcess) {
 		when (data) {
 			StatusProcess.Load -> {
-				openAbout(coordinates == 0)
+				openAbout(coordinates == 0 || coordinates > 5)
 				Log.d("@@@", "App - start data loading")
 				binding.loadingLayout.visibility = View.VISIBLE
 				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
@@ -148,6 +162,106 @@ class WindowList : Fragment(), ItemListClick {
 			putBoolean(W_FAST_BUNDLE, isFast)
 		}))
 	}
+
+//region Geo Location segment
+	private fun location() {
+		checkPermission()
+	}
+
+	private fun checkPermission() {
+		when {
+			ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) ==
+				PackageManager.PERMISSION_GRANTED -> { getLocation() }
+			shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> { explain() }
+			else -> { permissionGranting() }
+		}
+	}
+
+	private fun explain() = AlertDialog.Builder(requireContext())
+		.setTitle(getString(R.string.t_permission_title))
+		.setMessage(getString(R.string.t_permission_explain))
+		.setPositiveButton(getString(R.string.t_permission_yes)) { _, _ -> permissionGranting() }
+		.setNegativeButton(getString(R.string.t_permission_no)) { dialog, _ -> dialog.dismiss(); goBack() }
+		.create()
+		.show()
+
+	private fun permissionGranting() {
+		requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+	}
+
+	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray,) {
+		if (requestCode == REQUEST_CODE) {
+			for (i in permissions.indices) {
+				if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+					getLocation()
+				} else {
+					explain()
+				}
+			}
+		} else {
+			super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+		}
+	}
+
+	@SuppressLint("MissingPermission")
+	private fun getLocation() {
+		context?.let {
+			val locationManager = it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+				providerGPS?.let {
+					locationManager.requestLocationUpdates(
+						LocationManager.GPS_PROVIDER,
+						0,
+						100f,
+						locationListenerDistance
+					)
+				}
+			}
+		}
+	}
+
+	private val locationListenerDistance = object : LocationListener {
+		override fun onLocationChanged(location: Location) {
+			Log.d("@@@", "Loc $location")
+			getAddressByLocation(location)
+		}
+
+		override fun onProviderDisabled(provider: String) {
+			super.onProviderDisabled(provider)
+		}
+
+		override fun onProviderEnabled(provider: String) {
+			super.onProviderEnabled(provider)
+		}
+
+	}
+
+	fun getAddressByLocation(location: Location) {
+		val geocoder = Geocoder(requireContext())
+		Thread {
+			val addressText = geocoder.getFromLocation(location.latitude, location.longitude, 1000000)[0].getAddressLine(0)
+			requireActivity().runOnUiThread {
+				showAddressDialog(addressText, location)
+			}
+		}.start()
+	}
+
+	private fun showAddressDialog(address: String, location: Location) {
+		activity?.let {
+			AlertDialog.Builder(it)
+				.setTitle(getString(R.string.t_location_success))
+				.setMessage(address)
+				.setPositiveButton(getString(R.string.t_open_details)) { _, _ ->
+					binding.loadingLayout.visibility = View.GONE
+					viewModel.getWeather(Weather(City(address,location.latitude,location.longitude)))
+				}
+				.setNegativeButton(getString(R.string.t_cancel_locations)) { dialog, _ -> dialog.dismiss(); goBack() }
+				.create()
+				.show()
+		}
+	}
+//endregion
 
 	companion object {
 		@JvmStatic
