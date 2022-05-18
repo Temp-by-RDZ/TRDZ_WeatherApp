@@ -37,6 +37,7 @@ import java.util.*
 
 class WindowList : Fragment(), ItemListClick {
 
+//region Elements
 	private var _executors: Leader? = null
 	private val executors get() = _executors!!
 	private var _binding: FragmentWindowListBinding? = null
@@ -49,6 +50,9 @@ class WindowList : Fragment(), ItemListClick {
 	private var status: Int = 0
 	private var quest: Int = 0
 
+//endregion
+
+//region Base realization
 	override fun onDestroyView() {
 		super.onDestroyView()
 		_binding = null
@@ -70,16 +74,21 @@ class WindowList : Fragment(), ItemListClick {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		binding.loadingLayout.visibility = View.VISIBLE
 		binding.BBack.setOnClickListener { goBack()	}
 		binding.recycleList.adapter = adapter
 		val observer = Observer<StatusProcess> { renderData(it) }
 		viewModel.getData().observe(viewLifecycleOwner, observer)
+
 		rememberChose(coordinates)
 		startSearch()
 	}
 
+//endregion
+
+//region Main functional
 	private fun goBack() {
-		rememberChose(-1)
+		rememberChose(-2)
 		requireActivity().supportFragmentManager.popBackStack()
 	}
 
@@ -88,15 +97,17 @@ class WindowList : Fragment(), ItemListClick {
 	}
 
 	private fun startSearch() {
-		if (coordinates == 0) viewModel.getWeather()
-		else if (coordinates >5) location()
-		else viewModel.getWeatherList(coordinates)
+		when (coordinates) {
+			-1 -> location()
+			0 -> viewModel.getWeather()
+			else -> viewModel.getWeatherList(coordinates)
+		}
 	}
 
 	private fun renderData(data: StatusProcess) {
 		when (data) {
 			StatusProcess.Load -> {
-				openAbout(coordinates == 0 || coordinates > 5)
+				openAbout(coordinates < 1)
 				Log.d("@@@", "App - start data loading")
 				binding.loadingLayout.visibility = View.VISIBLE
 				executors.getExecutor().showToast(requireContext(), getString(R.string.t_loading), Toast.LENGTH_SHORT)
@@ -125,7 +136,7 @@ class WindowList : Fragment(), ItemListClick {
 				}
 			}
 			is StatusProcess.TransferList -> {
-				Log.d("@@@", "App - get list")
+				Log.d("@@@", "App - get list $coordinates")
 				dataAnalyze(data.dataAll)
 			}
 			is StatusProcess.Success -> {
@@ -163,6 +174,8 @@ class WindowList : Fragment(), ItemListClick {
 			putBoolean(W_FAST_BUNDLE, isFast)
 		}))
 	}
+
+//endregion
 
 //region Geolocation segment
 	private fun location() {
@@ -259,12 +272,15 @@ class WindowList : Fragment(), ItemListClick {
 				}
 				.setNegativeButton(getString(R.string.t_cancel_locations)) { dialog, _ -> dialog.dismiss(); goBack() }
 				.setNeutralButton(R.string.t_change_locations) { dialog, _ -> dialog.dismiss()
-					executors.getNavigation().add(requireActivity().supportFragmentManager, WindowMaps())}
+					executors.getNavigation().add(requireActivity().supportFragmentManager, WindowMaps.newInstance(location.latitude,location.longitude))}
 				.create()
 				.show()
 		}
 	}
+
 //endregion
+
+	override fun onItemClick(weather: Weather) = viewModel.getWeather(weather)
 
 	companion object {
 		@JvmStatic
@@ -275,7 +291,5 @@ class WindowList : Fragment(), ItemListClick {
 				}
 			}
 	}
-
-	override fun onItemClick(weather: Weather) = viewModel.getWeather(weather)
 
 }

@@ -19,10 +19,14 @@ import com.trdz.weather.z_utility.loadSvg
 
 class WindowDetails : Fragment() {
 
+//region Elements
 	private var _binding: FragmentWindowDetailsBinding? = null
 	private val binding get() = _binding!!
 	private var repeatable: Boolean = false
 
+//endregion
+
+//region Base realization
 	private val receiver = object : BroadcastReceiver() {
 		override fun onReceive(context: Context?, intent: Intent?) {
 			intent?.getParcelableExtra<Weather>(SERVICE_SETTER)?.let { renderData(it) }
@@ -50,6 +54,9 @@ class WindowDetails : Fragment() {
 		)
 	}
 
+//endregion
+
+//region Main functional
 	private fun fallBack() {
 		requireActivity().supportFragmentManager.popBackStack()
 		if (repeatable) requireActivity().supportFragmentManager.popBackStack()
@@ -62,14 +69,11 @@ class WindowDetails : Fragment() {
 			feelsLikeValue.text = data.sumare.toString()
 			temperatureValue.text = data.temperature.toString()
 			details.visibility = View.VISIBLE
-			/*
-			Glide.with(requireContext()).load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(headerIcon)
-			Picasso.get()?.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")?.into(headerIcon)
-			headerCityIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")*/
-
 			icon.loadSvg("https://yastatic.net/weather/i/icons/blueye/color/svg/${data.icon}.svg")
 		}
 	}
+
+//endregion
 
 	companion object {
 		@JvmStatic

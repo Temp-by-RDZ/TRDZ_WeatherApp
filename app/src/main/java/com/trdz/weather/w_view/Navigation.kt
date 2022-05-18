@@ -6,6 +6,12 @@ import androidx.fragment.app.FragmentTransaction
 
 class Navigation(private var fastContainer: Int = 0) {
 
+	fun returnTo(manager: FragmentManager, toId: Int = 0) {
+		if (manager.backStackEntryCount <= toId) return
+		val entry: FragmentManager.BackStackEntry = manager.getBackStackEntryAt(toId)
+		manager.popBackStackImmediate(entry.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+		}
+
 	fun add(manager: FragmentManager, fragment: Fragment?, remember: Boolean = true, container: Int = fastContainer) {
 		if (manager.isDestroyed) return
 		manager.beginTransaction().apply {

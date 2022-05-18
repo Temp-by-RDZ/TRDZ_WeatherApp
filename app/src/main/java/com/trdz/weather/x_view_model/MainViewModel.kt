@@ -2,23 +2,21 @@ package com.trdz.weather.x_view_model
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.trdz.weather.y_model.*
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
 
 class MainViewModel(
-	private val dataLive: MutableLiveData<StatusProcess> = MutableLiveData(),
-	private val repository: DataExecutor = DataExecutor(),
+	private val dataLive: SingleLiveData<StatusProcess> = SingleLiveData(),
+	private val repository: DataExecutor = DataExecutor()
 ) : ViewModel(), ServerResponse {
-
-	fun boo(weather: Weather) {
-		Log.d("@@@", "booooooooooooooooooo so scary")
-		getWeather(weather)
-	}
 
 	fun getData(): LiveData<StatusProcess> {
 		return dataLive
+	}
+
+	fun analyzeMap(weather: Weather) {
+		getWeather(weather)
 	}
 
 	fun getWeather(weather: Weather = Weather(currentCity())) {

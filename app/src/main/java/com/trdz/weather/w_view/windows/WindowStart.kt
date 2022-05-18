@@ -15,11 +15,14 @@ import com.trdz.weather.z_utility.PARAM_POS_KEY
 
 class WindowStart : Fragment(), View.OnClickListener {
 
+//region Elements
 	private var _executors: Leader? = null
 	private val executors get() = _executors!!
 	private var _binding: FragmentWindowStartBinding? = null
 	private val binding get() = _binding!!
+//endregion
 
+//region Base realization
 	override fun onDestroyView() {
 		super.onDestroyView()
 		_binding = null
@@ -38,6 +41,9 @@ class WindowStart : Fragment(), View.OnClickListener {
 		goToLastPosition()
 	}
 
+//endregion
+
+//region Main functional
 	private fun buttonBinds() {
 		binding.bStartMe.setOnClickListener(this)
 		binding.bStartAsia.setOnClickListener(this)
@@ -47,8 +53,8 @@ class WindowStart : Fragment(), View.OnClickListener {
 	}
 
 	private fun goToLastPosition() {
-		val waypoint = requireActivity().getSharedPreferences(OPTIONS_KEY,Context.MODE_PRIVATE).getInt(PARAM_POS_KEY,-1)
-		if (waypoint>-1) executors.getNavigation().add(requireActivity().supportFragmentManager, WindowList.newInstance(waypoint))
+		val waypoint = requireActivity().getSharedPreferences(OPTIONS_KEY,Context.MODE_PRIVATE).getInt(PARAM_POS_KEY,-2)
+		if (waypoint>-2) executors.getNavigation().add(requireActivity().supportFragmentManager, WindowList.newInstance(waypoint))
 	}
 
 	private fun getCord(type: View?): Int {
@@ -60,12 +66,14 @@ class WindowStart : Fragment(), View.OnClickListener {
 		}
 		return 0
 	}
+//endregion
+
+	override fun onClick(type: View?) {
+		executors.getNavigation().add(requireActivity().supportFragmentManager, WindowList.newInstance(getCord(type)))
+	}
 
 	companion object {
 		fun newInstance() = WindowStart()
 	}
 
-	override fun onClick(type: View?) {
-		executors.getNavigation().add(requireActivity().supportFragmentManager, WindowList.newInstance(getCord(type)))
-	}
 }

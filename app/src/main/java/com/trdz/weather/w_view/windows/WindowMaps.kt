@@ -1,5 +1,6 @@
 package com.trdz.weather.w_view.windows
 
+import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -11,7 +12,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -19,20 +19,58 @@ import com.trdz.weather.R
 import com.trdz.weather.databinding.FragmentWindowMapsMainBinding
 import com.trdz.weather.z_utility.ERROR_NUMBER
 import androidx.lifecycle.ViewModelProvider
+import com.trdz.weather.w_view.Leader
+import com.trdz.weather.w_view.MainActivity
 import com.trdz.weather.x_view_model.MainViewModel
 import com.trdz.weather.y_model.City
 import com.trdz.weather.y_model.Weather
-
+import com.trdz.weather.z_utility.W_MAP_L_BUNDLE
+import com.trdz.weather.z_utility.W_MAP_T_BUNDLE
 
 class WindowMaps : Fragment() {
 
-	private lateinit var map: GoogleMap
+//region Elements
+	private var _executors: Leader? = null
+	private val executors get() = _executors!!
 	private var _binding: FragmentWindowMapsMainBinding? = null
 	private val binding get() = _binding!!
 	private var _viewModel: MainViewModel? = null
 	private val viewModel get() = _viewModel!!
+	private lateinit var map: GoogleMap
 	private var lastLat: Double = ERROR_NUMBER
-	private var lastLng: Double = ERROR_NUMBER
+	private var lastLon: Double = ERROR_NUMBER
+
+//endregion
+
+//region Base realization
+	override fun onDestroy() {
+		super.onDestroy()
+		_binding = null
+		_executors = null
+		_viewModel = null
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		arguments?.let {
+			lastLat = it.getDouble(W_MAP_T_BUNDLE)
+			lastLon = it.getDouble(W_MAP_L_BUNDLE)
+		}
+	}
+
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+		_binding = FragmentWindowMapsMainBinding.inflate(inflater, container, false)
+		_viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+		_executors = (requireActivity() as MainActivity)
+		return binding.root
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+		mapFragment?.getMapAsync(callback)
+		buttonBinds()
+	}
 
 	private val callback = OnMapReadyCallback { googleMap ->
 		/**
@@ -44,36 +82,60 @@ class WindowMaps : Fragment() {
 		 * install it inside the SupportMapFragment. This method will only be triggered once the
 		 * user has installed Google Play services and returned to the app.
 		 */
+		val start = LatLng(lastLat, lastLon)
 		map = googleMap
-		map.setOnMapLongClickListener {map.clear(); setMarker(it) }
-		val sydney = LatLng(-34.0, 151.0)
-		googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-		googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+		map.run {
+			setOnMapLongClickListener { clear(); setMarker(it) }
+			addMarker(MarkerOptions().position(start).title(getString(R.string.t_title_your_position)))
+			moveCamera(CameraUpdateFactory.newLatLng(start))
+		}
 	}
 
-	override fun onDestroy() {
-		super.onDestroy()
-		_binding = null
-		_viewModel = null
-	}
+//endregion
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-		_binding = FragmentWindowMapsMainBinding.inflate(inflater, container, false)
-		_viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-		return binding.root
-	}
-
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-		val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-		mapFragment?.getMapAsync(callback)
-		binding.BOpen.setOnClickListener { viewModel.boo(Weather(City("Ваша позиция",lastLat,lastLng))); requireActivity().supportFragmentManager.popBackStack()}
-		binding.BBack.setOnClickListener { requireActivity().supportFragmentManager.popBackStack(); requireActivity().supportFragmentManager.popBackStack() }
+//region Main functional
+	private fun buttonBinds() {
+		with(binding) {
+			BOpen.setOnClickListener {
+				viewModel.analyzeMap(Weather(City(getString(R.string.t_title_your_position),lastLat,lastLon)))
+				requireActivity().supportFragmentManager.popBackStack()}
+			BBack.setOnClickListener {
+				requireActivity().supportFragmentManager.popBackStack()
+				requireActivity().supportFragmentManager.popBackStack() }
+			bSearch.setOnClickListener {
+				val locName:String = binding.searchAddress.text.toString()
+				val geocoder = Geocoder(requireContext())
+				val result = geocoder.getFromLocationName(locName,1)
+				if (result.isNotEmpty()) {
+					val location = LatLng(
+						result[0].latitude,
+						result[0].longitude
+					)
+					setMarker(location)
+					map.moveCamera(CameraUpdateFactory.newLatLng(location))
+				}
+				else executors.getExecutor().showToast(requireContext(),"Локация не найдена. Уточните")
+			}
+		}
 	}
 
 	private fun setMarker(location: LatLng, search: String = ""): Marker {
 		lastLat = location.latitude
-		lastLng = location.longitude
-		return map.addMarker(MarkerOptions().position(location).title(search))!! //.icon(BitmapDescriptorFactory.fromResource(resourceId)
+		lastLon = location.longitude
+		return map.addMarker(MarkerOptions().position(location).title(search))!!
 	}
+
+//endregion
+
+	companion object {
+		@JvmStatic
+		fun newInstance(lat: Double, lon: Double) =
+			WindowMaps().apply {
+				arguments = Bundle().apply {
+					putDouble(W_MAP_T_BUNDLE, lat)
+					putDouble(W_MAP_L_BUNDLE, lon)
+				}
+			}
+	}
+
 }

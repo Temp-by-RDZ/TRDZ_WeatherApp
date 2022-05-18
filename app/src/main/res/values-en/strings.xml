@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="temp_real">Feels like</string>
+    <string name="temp_fealslike">Temperature</string>
+    <string name="t_start_me">My position</string>
+    <string name="t_start_europe">Europe</string>
+    <string name="t_start_asia">Asia</string>
+    <string name="t_start_africa">Africa</string>
+    <string name="t_start_other">America</string>
+    <string name="t_ignore_error">Reload previous data?</string>
+    <string name="t_repeat">Repeat</string>
+    <string name="t_error">Load Error:</string>
+    <string name="t_loading">Data loading</string>
+    <string name="b_back">Back</string>
+    <string name="t_work_line">Current Position</string>
+    <string name="t_location_success">Position found</string>
+    <string name="t_open_details">Open weather</string>
+    <string name="t_cancel_locations">Fallback</string>
+    <string name="t_change_locations">Change</string>
+    <string name="t_permission_title">Permission required</string>
+    <string name="t_permission_explain"> For location search required access to geolocation</string>
+    <string name="t_permission_yes">Confirm</string>
+    <string name="t_permission_no">Deny</string>
+    <string name="t_address_hint">enter adders</string>
+    <string name="b_start_search">GO</string>
+    <string name="t_open_weather">Open weather</string>
+    <string name="t_title_your_position">Your position</string>
+</resources>
