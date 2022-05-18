@@ -12,6 +12,11 @@ class MainViewModel(
 	private val repository: DataExecutor = DataExecutor(),
 ) : ViewModel(), ServerResponse {
 
+	fun boo(weather: Weather) {
+		Log.d("@@@", "booooooooooooooooooo so scary")
+		getWeather(weather)
+	}
+
 	fun getData(): LiveData<StatusProcess> {
 		return dataLive
 	}

@@ -11,6 +11,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:layout_marginStart="@dimen/margin_normal"
             android:id="@+id/t_name"
             style="@style/lines"
             android:layout_width="match_parent"

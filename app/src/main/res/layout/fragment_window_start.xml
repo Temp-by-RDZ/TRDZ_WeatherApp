@@ -1,36 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/sky"
     android:gravity="center"
-    android:orientation="vertical"
     tools:context=".w_view.windows.WindowStart">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/b_start_me"
-        style="@style/basic"
-        android:layout_marginTop="@dimen/head_skip"
-        android:text="@string/t_start_me" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_normal"
+            android:alpha="0.4"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="@dimen/margin_big"/>
+    </FrameLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/b_start_europe"
-        style="@style/basic"
-        android:text="@string/t_start_europe" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_normal"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/b_start_asia"
-        style="@style/basic"
-        android:text="@string/t_start_asia" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/b_start_me"
+            style="@style/basic"
+            android:layout_marginTop="@dimen/head_skip"
+            android:text="@string/t_start_me" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/b_start_other"
-        style="@style/basic"
-        android:text="@string/t_start_other" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/b_start_europe"
+            style="@style/basic"
+            android:text="@string/t_start_europe" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/b_start_africa"
-        style="@style/basic"
-        android:text="@string/t_start_africa" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/b_start_asia"
+            style="@style/basic"
+            android:text="@string/t_start_asia" />
 
-</LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/b_start_other"
+            style="@style/basic"
+            android:text="@string/t_start_other" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/b_start_africa"
+            style="@style/basic"
+            android:text="@string/t_start_africa" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

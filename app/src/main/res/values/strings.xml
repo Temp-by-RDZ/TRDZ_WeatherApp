@@ -20,8 +20,12 @@
     <string name="t_location_success">Местоположение определенно</string>
     <string name="t_open_details">Открыть погоду</string>
     <string name="t_cancel_locations">Вернуться</string>
+    <string name="t_change_locations">Изменить</string>
     <string name="t_permission_title">Требуется подтверждение</string>
     <string name="t_permission_explain"> Для вывода погоды по геолокации нужен доступ к геолокации</string>
     <string name="t_permission_yes">Подтвердить</string>
     <string name="t_permission_no">Запретить</string>
+    <string name="t_adress_hint">введите адрес</string>
+    <string name="b_start_search">GO</string>
+    <string name="t_open_weather">открыть погоду</string>
 </resources>

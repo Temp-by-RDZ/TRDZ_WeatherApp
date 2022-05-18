@@ -33,6 +33,7 @@ import com.trdz.weather.x_view_model.StatusProcess
 import com.trdz.weather.x_view_model.MainViewModel
 import com.trdz.weather.y_model.City
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
+import java.util.*
 
 class WindowList : Fragment(), ItemListClick {
 
@@ -63,7 +64,7 @@ class WindowList : Fragment(), ItemListClick {
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		_binding = FragmentWindowListBinding.inflate(inflater, container, false)
 		_executors = (requireActivity() as MainActivity)
-		_viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+		_viewModel  = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 		return binding.root
 	}
 
@@ -163,7 +164,7 @@ class WindowList : Fragment(), ItemListClick {
 		}))
 	}
 
-//region Geo Location segment
+//region Geolocation segment
 	private fun location() {
 		checkPermission()
 	}
@@ -238,9 +239,9 @@ class WindowList : Fragment(), ItemListClick {
 	}
 
 	fun getAddressByLocation(location: Location) {
-		val geocoder = Geocoder(requireContext())
+		val geocoder = Geocoder(requireContext(), Locale.getDefault())
 		Thread {
-			val addressText = geocoder.getFromLocation(location.latitude, location.longitude, 1000000)[0].getAddressLine(0)
+			val addressText = geocoder.getFromLocation(location.latitude, location.longitude, 1000000)[0].locality
 			requireActivity().runOnUiThread {
 				showAddressDialog(addressText, location)
 			}
@@ -257,6 +258,8 @@ class WindowList : Fragment(), ItemListClick {
 					viewModel.getWeather(Weather(City(address,location.latitude,location.longitude)))
 				}
 				.setNegativeButton(getString(R.string.t_cancel_locations)) { dialog, _ -> dialog.dismiss(); goBack() }
+				.setNeutralButton(R.string.t_change_locations) { dialog, _ -> dialog.dismiss()
+					executors.getNavigation().add(requireActivity().supportFragmentManager, WindowMaps())}
 				.create()
 				.show()
 		}

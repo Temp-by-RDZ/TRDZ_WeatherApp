@@ -4,9 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.drawerlayout.widget.DrawerLayout
 import com.trdz.weather.R
+import com.trdz.weather.w_view.windows.WindowMaps
 import com.trdz.weather.w_view.windows.WindowList
 import com.trdz.weather.w_view.windows.WindowStart
 
@@ -27,16 +26,14 @@ class MainActivity : AppCompatActivity(), Leader {
 		setContentView(R.layout.activity_main)
 		menuConstruct()
 		if (savedInstanceState == null) navigation.add(supportFragmentManager, WindowStart.newInstance(), false)
-
 	}
 
 	private fun menuConstruct() {
 		setSupportActionBar(findViewById(R.id.toolbar))
-
-		val drawer = findViewById<DrawerLayout>(R.id.drawer)
-		val toggle = ActionBarDrawerToggle(this, drawer, findViewById(R.id.toolbar), R.string.ND_OPEN, R.string.ND_CLOSE)
-		drawer.addDrawerListener(toggle)
-		toggle.syncState()
+		//val drawer = findViewById<DrawerLayout>(R.id.drawer)
+		//val toggle = ActionBarDrawerToggle(this, drawer, findViewById(R.id.toolbar), R.string.ND_OPEN, R.string.ND_CLOSE)
+		//drawer.addDrawerListener(toggle)
+		//toggle.syncState()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {

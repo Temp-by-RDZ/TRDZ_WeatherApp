@@ -3,6 +3,7 @@ package com.trdz.weather.y_model
 import android.util.Log
 import com.trdz.weather.x_view_model.ServerResponse
 import com.trdz.weather.z_utility.ERROR_NUMBER
+import java.lang.Thread.sleep
 import java.util.*
 
 class DataExecutor : Repository {
@@ -19,6 +20,7 @@ class DataExecutor : Repository {
 	fun connection(serverListener: ServerResponse, weather: Weather) {
 		Log.d("@@@", "Rep - start connection")
 		Thread {
+			sleep(5L)
 			var lat = weather.city.lat
 			var lon = weather.city.lon
 			if (internalData.reloadCheckup(lat,lon)) {
