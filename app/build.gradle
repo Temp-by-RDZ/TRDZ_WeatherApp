@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id "kotlin-android-extensions"
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -44,7 +45,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'// map - google
+    implementation 'com.google.android.gms:play-services-maps:18.0.2' // map - google
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.4'// notification - firebase
 
     apply plugin: 'kotlin-kapt'                                     // data - room
     implementation 'androidx.room:room-runtime:2.3.0'               // data - room

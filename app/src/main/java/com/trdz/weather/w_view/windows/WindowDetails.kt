@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.trdz.weather.databinding.FragmentWindowDetailsBinding
+import com.trdz.weather.w_view.Leader
+import com.trdz.weather.w_view.MainActivity
 import com.trdz.weather.y_model.Weather
 import com.trdz.weather.z_utility.SERVICE_BROAD
 import com.trdz.weather.z_utility.SERVICE_SETTER
@@ -20,6 +22,8 @@ import com.trdz.weather.z_utility.loadSvg
 class WindowDetails : Fragment() {
 
 //region Elements
+	private var _executors: Leader? = null
+	private val executors get() = _executors!!
 	private var _binding: FragmentWindowDetailsBinding? = null
 	private val binding get() = _binding!!
 	private var repeatable: Boolean = false
@@ -36,11 +40,13 @@ class WindowDetails : Fragment() {
 	override fun onDestroyView() {
 		super.onDestroyView()
 		_binding = null
+		_executors = null
 		LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		_binding = FragmentWindowDetailsBinding.inflate(inflater, container, false)
+		_executors = (requireActivity() as MainActivity)
 		return binding.root
 	}
 
@@ -58,8 +64,8 @@ class WindowDetails : Fragment() {
 
 //region Main functional
 	private fun fallBack() {
-		requireActivity().supportFragmentManager.popBackStack()
-		if (repeatable) requireActivity().supportFragmentManager.popBackStack()
+		if (repeatable) executors.getNavigation().returnTo(requireActivity().supportFragmentManager)
+		else requireActivity().supportFragmentManager.popBackStack()
 	}
 
 	private fun renderData(data: Weather) {

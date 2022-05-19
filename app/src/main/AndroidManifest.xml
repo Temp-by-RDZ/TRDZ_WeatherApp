@@ -30,6 +30,13 @@
         </activity>
 
         <service android:name=".x_view_model.Exchanger" />
+        <service android:name=".z_utility.GlobalNotification"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <receiver android:name=".x_view_model.Broadcaster" />
     </application>

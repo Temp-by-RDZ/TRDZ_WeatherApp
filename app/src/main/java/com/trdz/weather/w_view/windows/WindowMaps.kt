@@ -1,6 +1,7 @@
 package com.trdz.weather.w_view.windows
 
 import android.location.Geocoder
+import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -26,6 +27,7 @@ import com.trdz.weather.y_model.City
 import com.trdz.weather.y_model.Weather
 import com.trdz.weather.z_utility.W_MAP_L_BUNDLE
 import com.trdz.weather.z_utility.W_MAP_T_BUNDLE
+import java.util.*
 
 class WindowMaps : Fragment() {
 
@@ -96,27 +98,32 @@ class WindowMaps : Fragment() {
 //region Main functional
 	private fun buttonBinds() {
 		with(binding) {
-			BOpen.setOnClickListener {
-				viewModel.analyzeMap(Weather(City(getString(R.string.t_title_your_position),lastLat,lastLon)))
-				requireActivity().supportFragmentManager.popBackStack()}
-			BBack.setOnClickListener {
-				requireActivity().supportFragmentManager.popBackStack()
-				requireActivity().supportFragmentManager.popBackStack() }
-			bSearch.setOnClickListener {
-				val locName:String = binding.searchAddress.text.toString()
-				val geocoder = Geocoder(requireContext())
-				val result = geocoder.getFromLocationName(locName,1)
-				if (result.isNotEmpty()) {
-					val location = LatLng(
-						result[0].latitude,
-						result[0].longitude
-					)
-					setMarker(location)
-					map.moveCamera(CameraUpdateFactory.newLatLng(location))
-				}
-				else executors.getExecutor().showToast(requireContext(),"Локация не найдена. Уточните")
-			}
+			BOpen.setOnClickListener { prepareWeather() }
+			BBack.setOnClickListener { executors.getNavigation().returnTo(requireActivity().supportFragmentManager) }
+			bSearch.setOnClickListener { findLocation() }
 		}
+	}
+
+	private fun prepareWeather() {
+		requireActivity().supportFragmentManager.popBackStack()
+		val geocoder = Geocoder(requireContext(), Locale.getDefault())
+		val addressText = geocoder.getFromLocation(lastLat, lastLon, 1000000)[0].locality
+		viewModel.analyzeMap(Weather(City(addressText,lastLat,lastLon)))
+	}
+
+	private fun findLocation() {
+		val locName:String = binding.searchAddress.text.toString()
+		val geocoder = Geocoder(requireContext())
+		val result = geocoder.getFromLocationName(locName,1)
+		if (result.isNotEmpty()) {
+			val location = LatLng(
+				result[0].latitude,
+				result[0].longitude
+			)
+			setMarker(location)
+			map.moveCamera(CameraUpdateFactory.newLatLng(location))
+		}
+		else executors.getExecutor().showToast(requireContext(),"Локация не найдена. Уточните")
 	}
 
 	private fun setMarker(location: LatLng, search: String = ""): Marker {

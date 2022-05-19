@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "64600472768",
+    "project_id": "trdz-my-weather",
+    "storage_bucket": "trdz-my-weather.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64600472768:android:404b7135b9e45dbab34125",
+        "android_client_info": {
+          "package_name": "com.TRDZ.weather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64600472768-5c8abajtd4vebkuva9c7lggi52euidgu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.TRDZ.weather",
+            "certificate_hash": "b9f9df6295b7514a54cafe75fa86a0b75e54d4d3"
+          }
+        },
+        {
+          "client_id": "64600472768-tpeejacv1j4dpakgtctlkvijgnngkcr1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6C0elht5Nrk7ifKUiTbuGV9cCaPr4QVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64600472768-tpeejacv1j4dpakgtctlkvijgnngkcr1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
