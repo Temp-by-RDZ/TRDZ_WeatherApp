@@ -16,3 +16,4 @@
 local.properties
 apikey.properties
 
+/app/TempKey.jks

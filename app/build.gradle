@@ -29,8 +29,22 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        myRelease {
+            Properties properties = new Properties()
+            properties.load(rootProject.file("password.properties").newDataInputStream())
+            def password = properties.getProperty("password")
+
+            storeFile file("TempKey.jks")
+            storePassword = password
+            keyAlias 'TempKey'
+            keyPassword =password
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.myRelease
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
