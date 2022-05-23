@@ -6,7 +6,7 @@ import com.trdz.weather.z_utility.ERROR_NUMBER
 import java.lang.Thread.sleep
 import java.util.*
 
-class DataExecutor : Repository {
+class DataExecutor: Repository {
 
 	private val externalSource1: ExternalSource = ServerReceiver()
 	private val externalSource2: ExternalSource = ServerRetrofit()
@@ -23,34 +23,35 @@ class DataExecutor : Repository {
 			sleep(5L)
 			var lat = weather.city.lat
 			var lon = weather.city.lon
-			if (internalData.reloadCheckup(lat,lon)) {
+			if (internalData.reloadCheckup(lat, lon)) {
 				Log.d("@@@", "Rep - data found")
 				serverListener.put(getLast(weather))
 				return@Thread
 			}
 			if (weather.city.lat != ERROR_NUMBER) {
 				lat = Math.max(-89.90, Math.min(weather.city.lat, 89.90))
-				lon = Math.max(-179.90, Math.min(weather.city.lon, 179.90))}
+				lon = Math.max(-179.90, Math.min(weather.city.lon, 179.90))
+			}
 			Log.d("@@@", "Rep - download")
-			val serverStatus = externalSource2.load(lat,lon)
+			val serverStatus = externalSource2.load(lat, lon)
 			serverListener.newTarget(100)
-			Log.d("@@@", "Rep - get result with code:"+serverStatus.code.toString())
+			Log.d("@@@", "Rep - get result with code:" + serverStatus.code.toString())
 			if (serverStatus.result != null) {
-				val result = makeCurrent(weather,serverStatus.result)
+				val result = makeCurrent(weather, serverStatus.result)
 				internalData.save(result)
 				serverListener.put(result)
 			}
-			else serverListener.error(serverStatus.code,getLast(weather))
+			else serverListener.error(serverStatus.code, getLast(weather))
 		}.start()
 	}
 
 	private fun getLast(weather: Weather): Weather {
-		val result = internalData.load(weather.city.lat,weather.city.lon)
-		return if (result.result!=null) makeCurrent(weather,result.result)
-		else Weather(City("Ошибка подключениея",000.0,000.0),666,999)
+		val result = internalData.load(weather.city.lat, weather.city.lon)
+		return if (result.result != null) makeCurrent(weather, result.result)
+		else Weather(City("Ошибка подключениея", 000.0, 000.0), 666, 999)
 	}
 
 	private fun makeCurrent(weather: Weather, data: Weather): Weather {
-		return weather.copy(city = City(weather.city.name,data.city.lat,data.city.lon), temperature = data.temperature, sumare = data.sumare, icon = data.icon)
+		return weather.copy(city = City(weather.city.name, data.city.lat, data.city.lon), temperature = data.temperature, sumare = data.sumare, icon = data.icon)
 	}
 }

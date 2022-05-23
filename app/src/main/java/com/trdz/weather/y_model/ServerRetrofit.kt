@@ -6,7 +6,7 @@ import com.trdz.weather.MyApp
 import com.trdz.weather.z_utility.ERROR_NUMBER
 import com.trdz.weather.z_utility.toWeather
 
-class ServerRetrofit : ExternalSource {
+class ServerRetrofit: ExternalSource {
 
 	override fun load(lat: Double, lon: Double): ServerStatus {
 		if (lat == ERROR_NUMBER) return dynamicLoad()

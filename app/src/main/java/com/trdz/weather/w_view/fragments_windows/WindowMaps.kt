@@ -1,7 +1,6 @@
-package com.trdz.weather.w_view.windows
+package com.trdz.weather.w_view.fragments_windows
 
 import android.location.Geocoder
-import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -29,9 +28,9 @@ import com.trdz.weather.z_utility.W_MAP_L_BUNDLE
 import com.trdz.weather.z_utility.W_MAP_T_BUNDLE
 import java.util.*
 
-class WindowMaps : Fragment() {
+class WindowMaps: Fragment() {
 
-//region Elements
+	//region Elements
 	private var _executors: Leader? = null
 	private val executors get() = _executors!!
 	private var _binding: FragmentWindowMapsMainBinding? = null
@@ -42,9 +41,9 @@ class WindowMaps : Fragment() {
 	private var lastLat: Double = ERROR_NUMBER
 	private var lastLon: Double = ERROR_NUMBER
 
-//endregion
+	//endregion
 
-//region Base realization
+	//region Base realization
 	override fun onDestroy() {
 		super.onDestroy()
 		_binding = null
@@ -95,7 +94,7 @@ class WindowMaps : Fragment() {
 
 //endregion
 
-//region Main functional
+	//region Main functional
 	private fun buttonBinds() {
 		with(binding) {
 			BOpen.setOnClickListener { prepareWeather() }
@@ -108,13 +107,13 @@ class WindowMaps : Fragment() {
 		requireActivity().supportFragmentManager.popBackStack()
 		val geocoder = Geocoder(requireContext(), Locale.getDefault())
 		val addressText = geocoder.getFromLocation(lastLat, lastLon, 1000000)[0].locality
-		viewModel.analyzeMap(Weather(City(addressText,lastLat,lastLon)))
+		viewModel.analyzeMap(Weather(City(addressText, lastLat, lastLon)))
 	}
 
 	private fun findLocation() {
-		val locName:String = binding.searchAddress.text.toString()
+		val locName: String = binding.searchAddress.text.toString()
 		val geocoder = Geocoder(requireContext())
-		val result = geocoder.getFromLocationName(locName,1)
+		val result = geocoder.getFromLocationName(locName, 1)
 		if (result.isNotEmpty()) {
 			val location = LatLng(
 				result[0].latitude,
@@ -123,7 +122,7 @@ class WindowMaps : Fragment() {
 			setMarker(location)
 			map.moveCamera(CameraUpdateFactory.newLatLng(location))
 		}
-		else executors.getExecutor().showToast(requireContext(),"Локация не найдена. Уточните")
+		else executors.getExecutor().showToast(requireContext(), "Локация не найдена. Уточните")
 	}
 
 	private fun setMarker(location: LatLng, search: String = ""): Marker {
@@ -132,7 +131,7 @@ class WindowMaps : Fragment() {
 		return map.addMarker(MarkerOptions().position(location).title(search))!!
 	}
 
-//endregion
+	//endregion
 
 	companion object {
 		@JvmStatic

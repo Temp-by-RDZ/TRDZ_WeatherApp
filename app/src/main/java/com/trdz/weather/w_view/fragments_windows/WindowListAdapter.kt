@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view.windows
+package com.trdz.weather.w_view.fragments_windows
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.trdz.weather.y_model.Weather
 class WindowListAdapter(
 	private val onItemClick: ItemListClick,
 	private var data: List<Weather> = listOf(),
-) : RecyclerView.Adapter<WindowListAdapter.MyHolder?>() {
+): RecyclerView.Adapter<WindowListAdapter.MyHolder?>() {
 
 	@SuppressLint("NotifyDataSetChanged")
 	fun setData(dataNew: List<Weather>) {
@@ -34,7 +34,7 @@ class WindowListAdapter(
 
 	override fun getItemCount() = data.size
 
-	inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+	inner class MyHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 		fun bind(weather: Weather) {
 			FragmentWindowListItemBinding.bind(itemView).apply {
 				tName.text = weather.city.name

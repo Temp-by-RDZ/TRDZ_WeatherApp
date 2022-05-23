@@ -5,10 +5,10 @@ import com.trdz.weather.z_utility.ERROR_NUMBER
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Weather(val city: City = defaultCity(), val temperature: Int = -69, val sumare: Int = -69, val icon: String = "") : Parcelable
+data class Weather(val city: City = defaultCity(), val temperature: Int = -69, val sumare: Int = -69, val icon: String = ""): Parcelable
 
 @Parcelize
-data class City(var name: String, val lat: Double, val lon: Double) : Parcelable
+data class City(var name: String, val lat: Double, val lon: Double): Parcelable
 
 fun defaultCity() = City("Атлантида", 31.254167, -24.254167)
 fun currentCity() = City("Текущее местоположение", ERROR_NUMBER, ERROR_NUMBER)

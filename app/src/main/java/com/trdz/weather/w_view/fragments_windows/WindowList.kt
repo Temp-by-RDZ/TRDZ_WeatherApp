@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view.windows
+package com.trdz.weather.w_view.fragments_windows
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -35,9 +35,9 @@ import com.trdz.weather.y_model.City
 import kotlinx.android.synthetic.main.fragment_window_list.view.*
 import java.util.*
 
-class WindowList : Fragment(), ItemListClick {
+class WindowList: Fragment(), ItemListClick {
 
-//region Elements
+	//region Elements
 	private var _executors: Leader? = null
 	private val executors get() = _executors!!
 	private var _binding: FragmentWindowListBinding? = null
@@ -50,9 +50,9 @@ class WindowList : Fragment(), ItemListClick {
 	private var status: Int = 0
 	private var quest: Int = 0
 
-//endregion
+	//endregion
 
-//region Base realization
+	//region Base realization
 	override fun onDestroyView() {
 		super.onDestroyView()
 		_binding = null
@@ -68,14 +68,14 @@ class WindowList : Fragment(), ItemListClick {
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		_binding = FragmentWindowListBinding.inflate(inflater, container, false)
 		_executors = (requireActivity() as MainActivity)
-		_viewModel  = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+		_viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.loadingLayout.visibility = View.VISIBLE
-		binding.BBack.setOnClickListener { goBack()	}
+		binding.BBack.setOnClickListener { goBack() }
 		binding.recycleList.adapter = adapter
 		val observer = Observer<StatusProcess> { renderData(it) }
 		viewModel.getData().observe(viewLifecycleOwner, observer)
@@ -84,9 +84,9 @@ class WindowList : Fragment(), ItemListClick {
 		startSearch()
 	}
 
-//endregion
+	//endregion
 
-//region Main functional
+	//region Main functional
 	private fun goBack() {
 		rememberChose(-2)
 		requireActivity().supportFragmentManager.popBackStack()
@@ -127,7 +127,8 @@ class WindowList : Fragment(), ItemListClick {
 						if (binding.loadingLayout.error_found.isChecked) {
 							requireActivity().startService(Intent(requireContext(), Exchanger::class.java).apply { putExtra(SERVICE_GETTER, data.dataPast) })
 							status = 100
-						} else {
+						}
+						else {
 							status = 1
 							quest = 90
 							viewModel.repeat(data.dataPast)
@@ -175,19 +176,24 @@ class WindowList : Fragment(), ItemListClick {
 		}))
 	}
 
-//endregion
+	//endregion
 
-//region Geolocation segment
+	//region Geolocation segment
 	private fun location() {
 		checkPermission()
 	}
 
 	private fun checkPermission() {
 		when {
-			ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) ==
-				PackageManager.PERMISSION_GRANTED -> { getLocation() }
-			shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> { explain() }
-			else -> { permissionGranting() }
+			ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED -> {
+				getLocation()
+			}
+			shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+				explain()
+			}
+			else -> {
+				permissionGranting()
+			}
 		}
 	}
 
@@ -203,16 +209,18 @@ class WindowList : Fragment(), ItemListClick {
 		requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
 	}
 
-	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray,) {
+	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 		if (requestCode == REQUEST_CODE) {
 			for (i in permissions.indices) {
 				if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
 					getLocation()
-				} else {
+				}
+				else {
 					explain()
 				}
 			}
-		} else {
+		}
+		else {
 			super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 		}
 	}
@@ -235,7 +243,7 @@ class WindowList : Fragment(), ItemListClick {
 		}
 	}
 
-	private val locationListenerDistance = object : LocationListener {
+	private val locationListenerDistance = object: LocationListener {
 		override fun onLocationChanged(location: Location) {
 			Log.d("@@@", "Loc $location")
 			getAddressByLocation(location)
@@ -268,11 +276,13 @@ class WindowList : Fragment(), ItemListClick {
 				.setMessage(address)
 				.setPositiveButton(getString(R.string.t_open_details)) { _, _ ->
 					binding.loadingLayout.visibility = View.GONE
-					viewModel.getWeather(Weather(City(address,location.latitude,location.longitude)))
+					viewModel.getWeather(Weather(City(address, location.latitude, location.longitude)))
 				}
 				.setNegativeButton(getString(R.string.t_cancel_locations)) { dialog, _ -> dialog.dismiss(); goBack() }
-				.setNeutralButton(R.string.t_change_locations) { dialog, _ -> dialog.dismiss()
-					executors.getNavigation().add(requireActivity().supportFragmentManager, WindowMaps.newInstance(location.latitude,location.longitude))}
+				.setNeutralButton(R.string.t_change_locations) { dialog, _ ->
+					dialog.dismiss()
+					executors.getNavigation().add(requireActivity().supportFragmentManager, WindowMaps.newInstance(location.latitude, location.longitude))
+				}
 				.create()
 				.show()
 		}

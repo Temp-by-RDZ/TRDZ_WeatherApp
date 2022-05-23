@@ -9,15 +9,15 @@
     android:clickable="true"
     android:focusable="true"
     android:visibility="invisible"
-    tools:visibility="visible"
-    tools:context=".w_view.windows.WindowDetails">
+    tools:context=".w_view.fragments_windows.WindowDetails"
+    tools:visibility="visible">
 
     <TextView
-        android:gravity="center_horizontal"
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/head_skip"
+        android:gravity="center_horizontal"
         android:textSize="@dimen/t_head_size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,9 +29,10 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="@+id/message"
+        app:layout_constraintBottom_toBottomOf="@+id/message"
         app:layout_constraintStart_toEndOf="@+id/message"
         app:layout_constraintTop_toTopOf="@+id/message"
-        app:layout_constraintBottom_toBottomOf="@+id/message"/>
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/coordinates"
@@ -83,11 +84,11 @@
         app:layout_constraintTop_toTopOf="@+id/feelsLike_label" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:backgroundTint="@color/buttons"
         android:id="@+id/B_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/buttons"
         android:text="@string/b_back"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

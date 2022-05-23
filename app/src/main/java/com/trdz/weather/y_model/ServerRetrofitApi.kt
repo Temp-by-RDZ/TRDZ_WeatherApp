@@ -13,12 +13,13 @@ interface ServerRetrofitApi {
 	fun getWeather(
 		@Header(API_KEY) apikey: String,
 		@Query("lat") lat: Double,
-		@Query("lon") lon: Double
+		@Query("lon") lon: Double,
 	): Call<AboutWeather>
 }
+
 interface ServerRetrofitDynamicApi {
 	@GET(PACKAGE)
 	fun getWeather(
-		@Header(API_KEY) apikey: String
+		@Header(API_KEY) apikey: String,
 	): Call<AboutWeather>
 }

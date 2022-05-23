@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view.windows
+package com.trdz.weather.w_view.fragments_windows
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -21,16 +21,16 @@ import com.trdz.weather.z_utility.loadSvg
 
 class WindowDetails : Fragment() {
 
-//region Elements
+	//region Elements
 	private var _executors: Leader? = null
 	private val executors get() = _executors!!
 	private var _binding: FragmentWindowDetailsBinding? = null
 	private val binding get() = _binding!!
 	private var repeatable: Boolean = false
 
-//endregion
+	//endregion
 
-//region Base realization
+	//region Base realization
 	private val receiver = object : BroadcastReceiver() {
 		override fun onReceive(context: Context?, intent: Intent?) {
 			intent?.getParcelableExtra<Weather>(SERVICE_SETTER)?.let { renderData(it) }
@@ -60,9 +60,9 @@ class WindowDetails : Fragment() {
 		)
 	}
 
-//endregion
+	//endregion
 
-//region Main functional
+	//region Main functional
 	private fun fallBack() {
 		if (repeatable) executors.getNavigation().returnTo(requireActivity().supportFragmentManager)
 		else requireActivity().supportFragmentManager.popBackStack()
@@ -79,7 +79,7 @@ class WindowDetails : Fragment() {
 		}
 	}
 
-//endregion
+	//endregion
 
 	companion object {
 		@JvmStatic

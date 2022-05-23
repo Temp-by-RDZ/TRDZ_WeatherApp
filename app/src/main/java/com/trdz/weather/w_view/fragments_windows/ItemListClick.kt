@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view.windows
+package com.trdz.weather.w_view.fragments_windows
 
 import com.trdz.weather.y_model.Weather
 

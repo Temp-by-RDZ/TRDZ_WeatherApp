@@ -5,6 +5,6 @@
     <item
         android:id="@+id/open_geolocation"
         android:icon="@android:drawable/ic_dialog_map"
-        app:showAsAction="always"
-        android:title="@string/t_location" />
+        android:title="@string/t_location"
+        app:showAsAction="always" />
 </menu>

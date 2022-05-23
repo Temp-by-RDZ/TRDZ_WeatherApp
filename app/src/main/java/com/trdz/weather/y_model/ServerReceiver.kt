@@ -12,7 +12,7 @@ import java.lang.StringBuilder
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-class ServerReceiver():ExternalSource {
+class ServerReceiver(): ExternalSource {
 
 	override fun load(lat: Double, lon: Double): ServerStatus {
 		var responseCode = -1
@@ -40,7 +40,8 @@ class ServerReceiver():ExternalSource {
 		try { responseCode = urlConnection.responseCode }
 		catch (Ignored: Exception) {
 			Log.d("@@@", "Ser- Connection Error")
-			return ServerStatus(responseCode) }
+			return ServerStatus(responseCode)
+		}
 
 		try {
 			if (responseCode in 1..299) {

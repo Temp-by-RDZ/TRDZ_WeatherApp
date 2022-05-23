@@ -26,7 +26,7 @@ inline fun View.showSnackBar(message: Int, length: Int = Snackbar.LENGTH_LONG, a
 }
 
 inline fun View.showSnackBar(message: String, length: Int = Snackbar.LENGTH_LONG, action: Snackbar.() -> Unit) {
-	Snackbar.make(this, message, length).apply{
+	Snackbar.make(this, message, length).apply {
 		action()
 		show()
 	}
@@ -40,9 +40,9 @@ fun Snackbar.action(action: String, color: Int? = null, listener: (View) -> Unit
 	setAction(action, listener)
 	color?.let { setActionTextColor(color) }
 }
-	//endregion
+//endregion
 
-fun ImageView.loadSvg(url:String){
+fun ImageView.loadSvg(url: String) {
 	val imageLoader = ImageLoader.Builder(this.context)
 		.componentRegistry { add(SvgDecoder(this@loadSvg.context)) }
 		.build()
@@ -56,9 +56,9 @@ fun ImageView.loadSvg(url:String){
 }
 
 fun toWeather(data: AboutWeather?): Weather {
-	return if (data!=null) (Weather(City("",data.info.lat,data.info.lon), data.fact.temp, data.fact.feels_like,data.fact.icon))
+	return if (data != null) (Weather(City("", data.info.lat, data.info.lon), data.fact.temp, data.fact.feels_like, data.fact.icon))
 	else Weather()
-	}
+}
 
 fun toWeather(entityList: HistoryEntity): Weather {
 	return with(entityList) {
@@ -66,7 +66,7 @@ fun toWeather(entityList: HistoryEntity): Weather {
 	}
 }
 
-fun toEntity(code:Long, weather: Weather): HistoryEntity {
+fun toEntity(code: Long, weather: Weather): HistoryEntity {
 	return with(weather) {
 		HistoryEntity(0, code, city.name, city.lat, city.lon, temperature, sumare, icon)
 	}

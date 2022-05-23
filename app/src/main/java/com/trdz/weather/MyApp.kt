@@ -12,7 +12,7 @@ import com.trdz.weather.z_utility.DOMAIN
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MyApp : Application() {
+class MyApp: Application() {
 
 	override fun onCreate() {
 		super.onCreate()
@@ -26,7 +26,8 @@ class MyApp : Application() {
 			if (db == null) {
 				if (appContext != null) {
 					db = Room.databaseBuilder(appContext!!, DataBase::class.java, "test").build()
-				} else {
+				}
+				else {
 					throw IllegalStateException("Порченный appContext")
 				}
 			}

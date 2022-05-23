@@ -1,4 +1,4 @@
-package com.trdz.weather.w_view.windows
+package com.trdz.weather.w_view.fragments_windows
 
 import android.content.Context
 import android.os.Bundle
@@ -59,10 +59,10 @@ class WindowStart : Fragment(), View.OnClickListener {
 
 	private fun getCord(type: View?): Int {
 		when (type?.id) {
-			(R.id.b_start_asia) -> { return 1 }
-			(R.id.b_start_africa) -> { return 2 }
-			(R.id.b_start_europe) -> { return 3 }
-			(R.id.b_start_other) -> { return 4 }
+			(R.id.b_start_asia) -> return 1
+			(R.id.b_start_africa) -> return 2
+			(R.id.b_start_europe) -> return 3
+			(R.id.b_start_other) -> return 4
 		}
 		return 0
 	}

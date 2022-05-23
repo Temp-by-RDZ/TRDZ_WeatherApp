@@ -6,6 +6,6 @@ package com.trdz.weather.w_view
  * он обращается к лидеру и тот либо переводит в навигацию либо в исполнение задач
  */
 interface Leader {
-	fun getNavigation():Navigation
-	fun getExecutor():Executor
+	fun getNavigation(): Navigation
+	fun getExecutor(): Executor
 }

@@ -22,10 +22,10 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:backgroundTint="@color/buttons"
             android:id="@+id/B_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/buttons"
             android:text="@string/b_back" />
     </LinearLayout>
 
@@ -34,17 +34,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:visibility="visible"
         android:clickable="true"
-        tools:visibility="invisible">
+        android:visibility="visible"
+        tools:visibility="invisible"
+        android:focusable="true">
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/error_found"
             style="@style/ignore"
             android:layout_gravity="center_horizontal"
             android:text="@string/t_ignore_error"
-            android:visibility="invisible"
-            android:textSize="@dimen/t_basis"/>
+            android:textSize="@dimen/t_basis"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/progress_bar"

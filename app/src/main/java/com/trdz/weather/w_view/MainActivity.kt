@@ -8,35 +8,37 @@ import android.view.MenuItem
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.trdz.weather.R
-import com.trdz.weather.w_view.windows.WindowList
-import com.trdz.weather.w_view.windows.WindowStart
+import com.trdz.weather.w_view.fragments_windows.WindowList
+import com.trdz.weather.w_view.fragments_windows.WindowStart
 
 class MainActivity : AppCompatActivity(), Leader {
 
-//region Elements
+	//region Elements
 	private val navigation = Navigation(R.id.container_fragment_base)
 	private val executor = Executor()
 
-//endregion
+	//endregion
 
-//region Base realization
+	//region Base realization
 	override fun onDestroy() {
 		executor.stop()
 		super.onDestroy()
 	}
 
-	override fun onBackPressed() { /*nothing*/ }
+	override fun onBackPressed() { /*nothing*/
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 		menuConstruct()
-		if (savedInstanceState == null) navigation.replace(supportFragmentManager, WindowStart.newInstance(),false)
+		if (savedInstanceState == null) navigation.replace(supportFragmentManager, WindowStart.newInstance(), false)
+		getToken()
 	}
 
-//endregion
+	//endregion
 
-//region Menu realization
+	//region Menu realization
 	private fun getToken() {
 		FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
 			if (!task.isSuccessful) {
@@ -62,14 +64,14 @@ class MainActivity : AppCompatActivity(), Leader {
 		return super.onOptionsItemSelected(item)
 	}
 
-//endregion
+	//endregion
 
-//region Main functional
+	//region Main functional
 	private fun openGeo() {
 		navigation.returnTo(supportFragmentManager)
 		navigation.add(supportFragmentManager, WindowList.newInstance(-1))
 	}
-//endregion
+	//endregion
 
 	override fun getNavigation() = navigation
 	override fun getExecutor() = executor
